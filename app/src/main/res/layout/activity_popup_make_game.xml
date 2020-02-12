@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="370dp"
+    android:layout_height="wrap_content"
+    android:background="#eeeeee"
+    android:orientation="vertical">
+
+    <!-- 타이틀바 -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/make_game_textView_title"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:background="#ff7a00"
+            android:gravity="center"
+            android:text="밴픽 구성"
+            android:textColor="#fff"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_conversion_absoluteHeight="53dp"
+            tools:layout_conversion_absoluteWidth="300dp" />
+
+        <TextView
+            android:id="@+id/make_game_textView_X"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="X"
+            android:textColor="#FFFFFFFF"
+            android:textSize="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- //end 타이틀바 -->
+
+    <!-- Notice -->
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+
+            <TextView
+                android:id="@+id/make_game_textView0"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:text="매치 이름"
+                android:textColor="#000000"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/make_game_editText_input"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:maxLength="15"
+                android:selectAllOnFocus="true"
+                android:textSize="15dp"
+                app:layout_constraintBottom_toBottomOf="@+id/make_game_textView0"
+                app:layout_constraintStart_toEndOf="@+id/make_game_textView0"
+                app:layout_constraintTop_toTopOf="@+id/make_game_textView0" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp">
+
+            <RadioGroup
+                android:id="@+id/radioGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="76dp"
+                app:layout_constraintBottom_toBottomOf="@+id/make_game_textView1"
+                app:layout_constraintStart_toEndOf="@+id/make_game_textView1"
+                app:layout_constraintTop_toTopOf="@+id/make_game_textView1">
+
+                <RadioButton
+                    android:id="@+id/make_game_radioButton_normal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="일반 게임"
+                    android:textColor="#000000"
+                    android:textSize="12dp" />
+
+                <RadioButton
+                    android:id="@+id/make_game_radioButton_rank"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="랭크 게임"
+                    android:textColor="#000000"
+                    android:textSize="12dp" />
+
+                <RadioButton
+                    android:id="@+id/make_game_radioButton_draft"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="토너먼트 드래프트"
+                    android:textColor="#000000"
+                    android:textSize="12dp" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/make_game_textView1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:text="게임 모드"
+                android:textColor="#000000"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp">
+
+            <TextView
+                android:id="@+id/make_game_textView_team0_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="기본팀"
+                android:textColor="@color/colorBlueTeam"
+                android:textSize="16dp"
+                app:layout_constraintEnd_toEndOf="@+id/make_game_backgroud0"
+                app:layout_constraintStart_toStartOf="@+id/make_game_backgroud0"
+                app:layout_constraintTop_toBottomOf="@+id/make_game_backgroud0" />
+
+            <TextView
+                android:id="@+id/make_game_textView_team1_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="기본팀"
+                android:textColor="@color/colorRedTeam"
+                android:textSize="16dp"
+                app:layout_constraintEnd_toEndOf="@+id/make_game_backgroud1"
+                app:layout_constraintStart_toStartOf="@+id/make_game_backgroud1"
+                app:layout_constraintTop_toBottomOf="@+id/make_game_team1_logo" />
+
+            <TextView
+                android:id="@+id/make_game_backgroud0"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="48dp"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/team_logo_backgroud"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/make_game_backgroud1"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginEnd="48dp"
+                android:background="@drawable/team_logo_backgroud"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/make_game_backgroud0" />
+
+            <ImageView
+                android:id="@+id/make_game_imageView_change"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:scaleType="centerInside"
+                app:layout_constraintEnd_toEndOf="@+id/make_game_vs"
+                app:layout_constraintStart_toStartOf="@+id/make_game_vs"
+                app:layout_constraintTop_toBottomOf="@+id/make_game_vs"
+                android:src="@drawable/change" />
+
+            <TextView
+                android:id="@+id/make_game_vs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="vs"
+                android:textColor="#000000"
+                android:textSize="40dp"
+                app:layout_constraintBottom_toBottomOf="@+id/make_game_backgroud0"
+                app:layout_constraintEnd_toStartOf="@+id/make_game_backgroud1"
+                app:layout_constraintStart_toEndOf="@+id/make_game_backgroud0"
+                app:layout_constraintTop_toTopOf="@+id/make_game_backgroud0" />
+
+            <ImageView
+                android:id="@+id/make_game_team0_logo"
+                android:layout_width="58dp"
+                android:layout_height="58dp"
+                app:layout_constraintBottom_toBottomOf="@+id/make_game_backgroud0"
+                app:layout_constraintEnd_toEndOf="@+id/make_game_backgroud0"
+                app:layout_constraintStart_toStartOf="@+id/make_game_backgroud0"
+                app:layout_constraintTop_toTopOf="@+id/make_game_backgroud0"
+                android:src="@drawable/nothing" />
+
+            <ImageView
+                android:id="@+id/make_game_team1_logo"
+                android:layout_width="58dp"
+                android:layout_height="58dp"
+                app:layout_constraintBottom_toBottomOf="@+id/make_game_backgroud1"
+                app:layout_constraintEnd_toEndOf="@+id/make_game_backgroud1"
+                app:layout_constraintStart_toStartOf="@+id/make_game_backgroud1"
+                app:layout_constraintTop_toTopOf="@+id/make_game_backgroud1"
+                android:src="@drawable/nothing" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+    <!-- Notice -->
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#66bdbdbd" />
+
+    <!-- 닫기 버튼 -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/make_game_textView_next"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="4dp"
+            android:gravity="center"
+            android:text="&gt;"
+            android:textColor="#000000"
+            android:textSize="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <!--// 닫기 버튼 -->
+</LinearLayout>
