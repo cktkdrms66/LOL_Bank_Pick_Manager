@@ -1,6 +1,8 @@
 package com.example.lol_ban_pick_manager;
 
 import android.app.Application;
+import android.content.Context;
+import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
@@ -15,7 +17,7 @@ public class ApplicationClass extends Application {
     static int maxNodeNum = 5;
     static ArrayList<Team> teams = new ArrayList<>();
     static ArrayList<Champion> champions = new ArrayList<>();
-
+    static ArrayList<Match> matches = new ArrayList<>();
 
     @Override
     public void onCreate() {
@@ -23,6 +25,13 @@ public class ApplicationClass extends Application {
         setting();
     }
 
+
+    static void showToast(Context context, String text){
+        Toast.makeText(context, text, Toast.LENGTH_LONG).show();
+    }
+    static void addMatch(Match match){
+        matches.add(match);
+    }
     static void setting(){
         if(teams.size() == 0){
             Champion.championSetting();

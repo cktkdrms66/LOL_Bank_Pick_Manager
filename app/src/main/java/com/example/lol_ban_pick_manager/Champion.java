@@ -1,21 +1,72 @@
 package com.example.lol_ban_pick_manager;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Champion {
+public class Champion implements Serializable {
     String name;
     int image;
+    boolean isChampion = true;
 
+
+    public Champion(int position){
+        if(position == 0){
+            name = "아무 챔피언";
+            image = R.drawable.randomchampion;
+        }else if(position == 1){
+            name = "탑 챔피언";
+            image = R.drawable.position_top;
+        }else if(position == 2){
+            name = "정글 챔피언";
+            image = R.drawable.position_jg;
+        }else if(position == 3){
+            name = "미드 챔피언";
+            image = R.drawable.position_mid;
+        }else if(position == 4){
+            name = "바텀 챔피언";
+            image = R.drawable.position_bot;
+        }else if(position == 5){
+            name = "서포터 챔피언";
+            image = R.drawable.position_sup;
+        }
+        isChampion = false;
+    }
     public Champion(String name, int image){
         this.name = name;
         this.image = image;
     }
 
+    public static Champion makePlus(){
+        Champion champion = new Champion("추가", R.drawable.plus);
+        champion.isChampion = false;
+        return champion;
+    }
+
+    public static int getChampionIndex(String name){
+        int i;
+        for(i = 0; i < ApplicationClass.champions.size(); i++){
+            Champion champion = ApplicationClass.champions.get(i);
+            if(champion.name == name){
+                System.out.println(name);
+                return i;
+            }
+        }
+        System.out.println("no champ");
+        return -1;
+    }
+
+    public static int getChampionImage(int pos){
+        Champion champion = ApplicationClass.champions.get(pos);
+        return champion.image;
+    }
+    public static Champion getChampion(int pos){
+        Champion champion = ApplicationClass.champions.get(pos);
+        return new Champion(champion.name, champion.image);
+    }
     public static Champion getChampion(String name){
         for(int i = 0; i < ApplicationClass.champions.size(); i++){
             Champion champion = ApplicationClass.champions.get(i);
             if(champion.name == name){
-                System.out.println(name);
                 return new Champion(champion.name, champion.image);
             }
         }
@@ -25,6 +76,12 @@ public class Champion {
 
     public static void championSetting(){
         ArrayList<Champion> champions = ApplicationClass.champions;
+        champions.add(new Champion(0));
+        champions.add(new Champion(1));
+        champions.add(new Champion(2));
+        champions.add(new Champion(3));
+        champions.add(new Champion(4));
+        champions.add(new Champion(5));
         champions.add(new Champion("가렌", R.drawable.garen));
         champions.add(new Champion("갈리오", R.drawable.galio));
         champions.add(new Champion("갱플랭크", R.drawable.gangplank));

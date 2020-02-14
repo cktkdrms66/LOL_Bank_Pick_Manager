@@ -5,7 +5,11 @@ import android.content.Context;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class CustomDialog {
     private Context context;
@@ -23,6 +27,10 @@ public class CustomDialog {
         mOkListener = listener;
     }
 
+    public static void showDialog(Context context, String text){
+        CustomDialog customDialog = new CustomDialog(context);
+        customDialog.callFunction(text);
+    }
 
     public void callFunction(String text) {
 

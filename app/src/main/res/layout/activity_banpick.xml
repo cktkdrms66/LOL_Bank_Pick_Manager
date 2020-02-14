@@ -1020,6 +1020,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/banpick_imageView_menu"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/banpick_imageView_menu" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

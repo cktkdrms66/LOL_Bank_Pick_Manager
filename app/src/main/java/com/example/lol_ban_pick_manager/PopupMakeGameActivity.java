@@ -19,9 +19,9 @@ import androidx.core.content.ContextCompat;
 
 public class PopupMakeGameActivity extends Activity {
 
-    static String matchName;
-    static int mode = 2;
-    static boolean isDefaultPosition = true;
+    String matchName;
+    int mode = 2;
+    boolean isDefaultPosition = true;
     static Team team0;
     static Team team1;
 
@@ -87,6 +87,8 @@ public class PopupMakeGameActivity extends Activity {
                     public void onClick(View v) {
                         Intent intent = new Intent(getApplicationContext(), BanPickActivity.class);
                         matchName = editText_match_name.getText().toString();
+                        intent.putExtra("matchName", matchName);
+                        intent.putExtra("isDefault", isDefaultPosition);
                         if(radioButton_normal.isChecked()){
                             mode = 0;
                         }else if(radioButton_rank.isChecked()){

@@ -1,5 +1,7 @@
 package com.example.lol_ban_pick_manager;
 
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
@@ -23,7 +25,13 @@ public class ChampionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private OnItemClickListener mListener = null;
 
 
+    public int getmOnlyItemPosition() {
+        return mOnlyItemPosition;
+    }
 
+    public Champion getChampion(int pos){
+        return mItems.get(pos);
+    }
     public boolean getIsClicked(int pos){
         return mIsClicked.get(pos);
     }
@@ -38,17 +46,35 @@ public class ChampionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         this.mListener = listener;
     }
 
-    public void setClickClear(boolean isReturn){
+    public void setClickClear(boolean isReturn, boolean isNext){
         if(isReturn ==false){
             mIsClicked.set(mOnlyItemPosition, false);
             mIsPicked.set(mOnlyItemPosition, true);
-            notifyDataSetChanged();
+
             mOnlyItemPosition = -1;
         }else{
+            if(mOnlyItemPosition != -1){
+                setIsClicked(mOnlyItemPosition, false);
+            }
+            BanPickActivity context = ((BanPickActivity)BanPickActivity.context);
+            int championIndex = ((Match.PickClass)context.pickSerial.get(context.getPickIndex())).championIndex;
 
+            if(isNext == false){
+                mIsPicked.set(championIndex, false);
+                mIsClicked.set(championIndex, true);
+                mOnlyItemPosition = championIndex;
+            } else{
+                mIsPicked.set(championIndex, true);
+                mIsClicked.set(championIndex, false);
+                mOnlyItemPosition = -1;
+
+            }
         }
+        notifyDataSetChanged();
+
 
     }
+
 
     public void setOnlyClick(int pos, boolean isClick){
         if(isClick){
