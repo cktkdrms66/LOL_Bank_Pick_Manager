@@ -7,10 +7,6 @@
     <item
         android:id="@+id/load"
         android:title="불러오기"/>
-    <item
-        android:id="@+id/tree"
-        android:title="밴픽 트리 보기"/>
-
 
 
 </menu>

@@ -8,21 +8,40 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/dialog_tree_title"
+        android:id="@+id/dialog_list_textView0"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:gravity="center"
-        android:text="다음 벤픽 선택"
-        android:textColor="#000000"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="TextView"
+        android:textColor="#81000000"
         android:textSize="20dp" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/dialog_tree_recyclerView"
+    <TextView
+        android:id="@+id/dialog_list_textView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:background="#61949090" />
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="TextView"
+        android:textColor="#81000000"
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/dialog_list_textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="30dp"
+        android:text="TextView"
+        android:textColor="#81000000"
+        android:textSize="20dp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayout4"
@@ -33,41 +52,24 @@
         app:layout_constraintStart_toEndOf="@+id/dialog_okButton">
 
         <Button
-            android:id="@+id/dialog_tree_move"
+            android:id="@+id/dialog_list_ok"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:background="#ffffff"
             android:gravity="center"
-            android:text="선택"
-            android:textColor="#5E000000"
+            android:text="확인"
+            android:textColor="#000000"
             android:textSize="13dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/dialog_tree_remove"
+            app:layout_constraintEnd_toStartOf="@+id/dialog_list_cancel"
             app:layout_constraintTop_toTopOf="parent"
             tools:layout_conversion_absoluteHeight="60dp"
             tools:layout_conversion_absoluteWidth="206dp" />
 
         <Button
-            android:id="@+id/dialog_tree_remove"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:background="#ffffff"
-            android:gravity="center"
-            android:text="삭제"
-            android:textColor="#5E000000"
-            android:textSize="13dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/dialog_tree_cancel"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_conversion_absoluteHeight="60dp"
-            tools:layout_conversion_absoluteWidth="206dp" />
-
-        <Button
-            android:id="@+id/dialog_tree_cancel"
+            android:id="@+id/dialog_list_cancel"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="60dp"
             android:layout_height="wrap_content"

@@ -11,9 +11,10 @@
         android:theme="@style/AppTheme"
         android:name=".ApplicationClass">
         <activity android:name=".BanPickActivity"/>
+        <activity android:name=".PopupSaveGameActivity" android:theme="@android:style/Theme.Dialog"/>
+        <activity android:name=".PopupGameActivity" android:theme="@android:style/Theme.Dialog"/>
         <activity android:name=".PopupMakeGameActivity" android:theme="@android:style/Theme.Dialog"/>
         <activity android:name=".PopupTeamActivity" android:theme="@android:style/Theme.Dialog"/>
-        <activity android:name=".PopupTreeActivity" android:theme="@android:style/Theme.Dialog"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

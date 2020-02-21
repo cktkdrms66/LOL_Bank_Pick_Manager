@@ -56,6 +56,9 @@ public class Champion implements Serializable {
     }
 
     public static int getChampionImage(int pos){
+        if(pos == -1){
+            return -1;
+        }
         Champion champion = ApplicationClass.champions.get(pos);
         return champion.image;
     }

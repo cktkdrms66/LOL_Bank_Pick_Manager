@@ -20,20 +20,16 @@ import androidx.core.content.ContextCompat;
 public class PopupMakeGameActivity extends Activity {
 
     String matchName;
-    int mode = 2;
     boolean isDefaultPosition = true;
-    static Team team0;
-    static Team team1;
+    int team0Index;
+    int team1Index;
 
     TextView textView_X;
-    TextView textView_next;
+    ImageView imageView_ok;
     TextView textView_team0_name;
     TextView textView_team1_name;
     ImageView imageView_team0_logo;
     ImageView imageView_team1_logo;
-    RadioButton radioButton_normal;
-    RadioButton radioButton_rank;
-    RadioButton radioButton_draft;
     EditText editText_match_name;
     ImageView imageView_change;
 
@@ -46,38 +42,28 @@ public class PopupMakeGameActivity extends Activity {
         setContentView(R.layout.activity_popup_make_game);
 
         context = this;
-        team0 = null;
-        team1 = null;
+        team0Index = 1;
+        team1Index = 1;
 
-
+        imageView_ok = findViewById(R.id.make_game_ok);
         textView_X = findViewById(R.id.make_game_textView_X);
-        textView_next = findViewById(R.id.make_game_textView_next);
         textView_team0_name = findViewById(R.id.make_game_textView_team0_name);
         textView_team1_name = findViewById(R.id.make_game_textView_team1_name);
         imageView_team0_logo = findViewById(R.id.make_game_team0_logo);
         imageView_team1_logo = findViewById(R.id.make_game_team1_logo);
-        radioButton_draft = findViewById(R.id.make_game_radioButton_draft);
-        radioButton_normal = findViewById(R.id.make_game_radioButton_normal);
-        radioButton_rank = findViewById(R.id.make_game_radioButton_rank);
         editText_match_name = findViewById(R.id.make_game_editText_input);
         imageView_change = findViewById(R.id.make_game_imageView_change);
 
-        radioButton_draft.setChecked(true);
-        editText_match_name.setText("매치 " + (ApplicationClass.totalGameNum + 1));
+        editText_match_name.setText("매치 " + (ApplicationClass.totalMatchNum));
 
         textView_X.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
-                matchName = null;
-                isDefaultPosition = true;
-                mode = 2;
-                team0 = null;
-                team1 = null;
             }
         });
 
-        textView_next.setOnClickListener(new View.OnClickListener() {
+        imageView_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 CustomDialog customDialog = new CustomDialog(PopupMakeGameActivity.this);
@@ -87,15 +73,12 @@ public class PopupMakeGameActivity extends Activity {
                     public void onClick(View v) {
                         Intent intent = new Intent(getApplicationContext(), BanPickActivity.class);
                         matchName = editText_match_name.getText().toString();
-                        intent.putExtra("matchName", matchName);
-                        intent.putExtra("isDefault", isDefaultPosition);
-                        if(radioButton_normal.isChecked()){
-                            mode = 0;
-                        }else if(radioButton_rank.isChecked()){
-                            mode = 1;
-                        }else if(radioButton_draft.isChecked()){
-                            mode = 2;
-                        }
+                        Team team0 = ApplicationClass.teams.get(team0Index);
+                        Team team1 = ApplicationClass.teams.get(team1Index);
+                        Match match = Match.makeMatch(matchName, team0, team1, isDefaultPosition, 0, Match.makeDefaultgames());
+                        ApplicationClass.saveMatch(match);
+                        intent.putExtra("matchIndex", ApplicationClass.totalMatchNum-1);
+                        intent.putExtra("gameIndex", 0);
                         startActivity(intent);
                         finish();
                     }
@@ -125,7 +108,7 @@ public class PopupMakeGameActivity extends Activity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), PopupTeamActivity.class);
                 intent.putExtra("isOurTeam", true);
-                startActivity(intent);
+                startActivityForResult(intent, 0);
             }
         });
 
@@ -134,11 +117,24 @@ public class PopupMakeGameActivity extends Activity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), PopupTeamActivity.class);
                 intent.putExtra("isOurTeam", false);
-                startActivity(intent);
+                startActivityForResult(intent, 1);
             }
         });
 
 
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode==0){
+            if(resultCode==RESULT_OK){
+                //데이터 받기
+                team0Index = data.getExtras().getInt("teamIndex");
+            }
+        }else if(requestCode == 1){
+            if(resultCode == RESULT_OK){
+                team1Index = data.getExtras().getInt("teamIndex");
+            }
+        }
     }
 
     @Override

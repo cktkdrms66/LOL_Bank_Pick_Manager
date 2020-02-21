@@ -2,6 +2,7 @@ package com.example.lol_ban_pick_manager;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -28,11 +29,15 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.util.ArrayList;
 
 public class BanPickActivity extends AppCompatActivity {
 
 
+    //뷰 변수들
     RecyclerView recyclerView;
     TextView textView_team0_name;
     TextView textView_team1_name;
@@ -54,28 +59,31 @@ public class BanPickActivity extends AppCompatActivity {
     TextView textView_prev;
     TextView textView_next;
     Button button_pick;
-    ImageView imageView_swap;
+
     
     static Context context;
 
 
-    boolean isPicked = false;
-    boolean isLast = false;
-    boolean isFirst = true;
-    boolean isPickChange = true;
-    int swapIndex = 0;
+    //로직을 제어하는 변수들
+    boolean isPicked;
+    boolean isLast;
+    boolean isFirst;
+    boolean isPickChange;
+    int swapIndex;
 
-    private int[][] mostImage0 = new int[5][3];
-    private int[][] mostImage1 = new int[5][3];
+    private int[][] mostImage0;
+    private int[][] mostImage1;
     ArrayList<Match.GameElement> pickSerial;
-    private boolean[] isImageClickedTeam0 = new boolean[5];
-    private boolean[] isImageClickedTeam1 = new boolean[5];
-    private int clickedIndex0 = -1;
-    private int clickedIndex1 = -1;
-    private int lastPickIndex = 0;
-    private int pickIndex = 0;
+    private boolean[] isImageClickedTeam0;
+    private boolean[] isImageClickedTeam1;
+    private int clickedIndex0;
+    private int clickedIndex1;
+    private int lastPickIndex;
+    private int pickIndex;
     private Match match;
     private Match.Game game;
+    private int matchIndex;
+    private int gameIndex;
     Team team0;
     Team team1;
     private Match.SwapPhaseClass swapPhaseClass;
@@ -87,19 +95,43 @@ public class BanPickActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_banpick);
 
+        //초기화
         context = this;
+        isPicked = false;
+        isLast = false;
+        isFirst = true;
+        isPickChange = true;
+        swapIndex = 0;
 
-        //매치 객체 만들기
+        mostImage0 = new int[5][3];
+        mostImage1 = new int[5][3];
+        isImageClickedTeam0 = new boolean[5];
+        isImageClickedTeam1 = new boolean[5];
+        clickedIndex0 = -1;
+        clickedIndex1 = -1;
+        lastPickIndex = 0;
+        pickIndex = 0;
+
+
+
+        //매치 객체 만들기 및 매치 저장하기
         Intent intent = getIntent();
-        String matchName = intent.getExtras().getString("matchName");
-        boolean isDefaultPosition = intent.getExtras().getBoolean("isDefault");
-        match = Match.makeMatch(matchName);
+        matchIndex = intent.getExtras().getInt("matchIndex");
+        match = ApplicationClass.matches.get(matchIndex);
+        team0 = match.team0;
+        team1 = match.team1;
+
 
         //게임 객체 만들기
-        game = new Match.Game();
+        gameIndex = intent.getExtras().getInt("gameIndex");
+        if(gameIndex == 0){
+            game = new Match.Game();
+        }else{
+            game = match.games.get(gameIndex);
+        }
         pickSerial = game.gameElements;
-        
-        
+
+
         textView_team0_name = findViewById(R.id.banpick_textView_team0_name);
         textView_team1_name = findViewById(R.id.banpick_textView_team1_name);
 
@@ -223,24 +255,11 @@ public class BanPickActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.banpick_recyclerView);
 
 
-        //상단 팀이름 설정
-        if(PopupMakeGameActivity.team0 == null){
-            team0 = ApplicationClass.teams.get(1);
-        }else{
-            team0 = PopupMakeGameActivity.team0;
-
-        }
-        if(PopupMakeGameActivity.team1 == null){
-            team1 = ApplicationClass.teams.get(1);
-        }else{
-            team1 = PopupMakeGameActivity.team1;
-
-        }
+        //상단 팀 이름 설정
         textView_team0_name.setText(team0.name);
         textView_team1_name.setText(team1.name);
-
         //벤픽 초기 설정
-        if(isDefaultPosition == true){
+        if(match.isTeam0Blue == true){
             textView_team0_ban_backs[0].setBackgroundResource(R.drawable.custom_ban_backgroud_now);
         }else{
             textView_team0_name.setBackgroundResource(R.color.colorRedTeam);
@@ -252,14 +271,13 @@ public class BanPickActivity extends AppCompatActivity {
             setPlayer0(team0.players[i], textView_team0_tears[i], imageView_team0_mosts[i], i);
             setPlayer1(team1.players[i], textView_team1_tears[i], imageView_team1_mosts[i], i);
         }
-        settingTeamArr(isDefaultPosition);
+        settingTeamArr(match.isTeam0Blue);
 
 
 
         //중단 챔피언 리사이클러뷰
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 4));
-
         final ChampionAdapter adapter = new ChampionAdapter(ApplicationClass.champions);
         recyclerView.setAdapter(adapter);
 
@@ -270,9 +288,15 @@ public class BanPickActivity extends AppCompatActivity {
                     return;
                 }
                 if(adapter.getIsClicked(pos) == false){
+                    int image = Champion.getChampionImage(adapter.getmOnlyItemPosition());
+                    setMostColor(false, image);
+
                     imageView.setColorFilter(Color.parseColor("#696969"), PorterDuff.Mode.MULTIPLY);
                     adapter.setIsClicked(pos, true);
                     adapter.setOnlyClick(pos, true);
+
+                    image = Champion.getChampionImage(pos);
+                    setMostColor(true, image);
 
                     setButton_pick(true);
                     Match.PickClass nowPick = (Match.PickClass) pickSerial.get(pickIndex);
@@ -359,7 +383,104 @@ public class BanPickActivity extends AppCompatActivity {
     
     
 
-    public void setMostColor(boolean isLightOn, ChampionAdapter adapter){
+
+
+    //기본 메소드
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==0){
+            if(resultCode==RESULT_OK){
+                int star = data.getExtras().getInt("star");
+                String gameName = data.getExtras().getString("gameName");
+                int victoryType = data.getExtras().getInt("victoryType");
+                game.star = star;
+                game.name = gameName;
+                if(victoryType == 0){
+                    game.victoryTeamLogo = match.team0.logo;
+                }else if(victoryType == 1){
+                    game.victoryTeamLogo = match.team1.logo;
+                }else{
+                    game.victoryTeamLogo = R.drawable.nothing;
+                }
+
+                ApplicationClass.addGame(match, game);
+                ApplicationClass.showToast(context, "저장이 완료되었습니다.");
+            }
+        }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        CustomDialog customDialog = new CustomDialog(BanPickActivity.this);
+        customDialog.callFunction("나가시겠습니까?");
+        customDialog.setOnOkClickListener(new CustomDialog.OnOkClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_banpick, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.save:
+                //저장
+                menuSave();
+                return true;
+            case R.id.load:
+                //불러오기
+                menuLoad();
+                return true;
+
+        }
+        return super.onContextItemSelected(item);
+    }
+
+    //메뉴 메소드들
+    public void menuSave(){
+        if(lastPickIndex != pickSerial.size()-1){
+            ApplicationClass.showToast(context, "아직 밴픽을 모두 완료하지 않았습니다.");
+            return;
+        }
+        Intent intent = new Intent(getApplicationContext(), PopupSaveGameActivity.class);
+        intent.putExtra("team0Name", team0.name);
+        intent.putExtra("team1Name", team1.name);
+        intent.putExtra("team0Image", team0.logo);
+        intent.putExtra("team1Image", team1.logo);
+        startActivityForResult(intent, 0);
+
+    }
+
+    public void menuLoad(){
+        Intent intent = new Intent(getApplicationContext(), PopupGameActivity.class);
+        intent.putExtra("matchIndex", matchIndex);
+        startActivity(intent);
+
+    }
+
+
+    //초기 세팅 메소드
+
+    public void setMostColor(boolean isLightOn, int image){
+        if(image == -1){
+            return;
+        }
+
         PorterDuff.Mode mode;
         if(isLightOn){
             mode = PorterDuff.Mode.MULTIPLY;
@@ -368,7 +489,6 @@ public class BanPickActivity extends AppCompatActivity {
         }
         for(int i = 0; i < 5; i++){
             for(int j = 0; j < 3; j++){
-                int image = adapter.getmOnlyItemPosition();
                 if(image == mostImage0[i][j]){
                     imageView_team0_mosts[i][j].setColorFilter(Color.parseColor("#696969"), mode);
                 }
@@ -480,45 +600,6 @@ public class BanPickActivity extends AppCompatActivity {
 
     }
 
-
-    @Override
-    public void onBackPressed() {
-        CustomDialog customDialog = new CustomDialog(BanPickActivity.this);
-        customDialog.callFunction("나가시겠습니까?");
-        customDialog.setOnOkClickListener(new CustomDialog.OnOkClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-    }
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_banpick, menu);
-    }
-
-    @Override
-    public boolean onContextItemSelected(@NonNull MenuItem item) {
-
-        switch (item.getItemId()){
-            case R.id.save:
-                //저장
-                Toast.makeText(this, "저장되었습니다.", Toast.LENGTH_LONG).show();
-                return true;
-            case R.id.load:
-                return true;
-            case R.id.tree:
-                //todo
-                return true;
-
-        }
-        return super.onContextItemSelected(item);
-    }
-
-
     public void settingTeamArr(boolean isDefaultPosition){
 
         int blueTeamBanIndex = 0;
@@ -583,10 +664,9 @@ public class BanPickActivity extends AppCompatActivity {
             mostImage1[index][i] = player.most.get(i).image;
         }
         for(int i = size; i < 3; i++){
-            mostImage0[index][i] = -1;
+            mostImage1[index][i] = -1;
         }
     }
-
 
     public int getPickIndex() {
         return pickIndex;
@@ -601,6 +681,11 @@ public class BanPickActivity extends AppCompatActivity {
             isPicked = false;
         }
     }
+
+
+
+    //하단 버튼에 대한 메소드
+
     public void lookPrevPick(ChampionAdapter adapter){
 
         isPickChange = false;
@@ -618,6 +703,9 @@ public class BanPickActivity extends AppCompatActivity {
         }else{
             //현재 픽을 조정한다
             Match.PickClass nowPick = ((Match.PickClass)pickSerial.get(pickIndex));
+            //모스트 중 회색 컬러 필터를 제거한다
+            int image = Champion.getChampionImage(nowPick.championIndex);
+            setMostColor(false, image);
             if(nowPick.equalPhase != null){
                 if(nowPick.isFirst){
                     //현재 픽과 같은 페이즈가 있고 현재 픽이 앞이라면 둘다 불을 끈다.
@@ -675,6 +763,8 @@ public class BanPickActivity extends AppCompatActivity {
 
         //현재 픽 완료
         Match.PickClass nowPick = ((Match.PickClass)pickSerial.get(pickIndex));
+        int image = Champion.getChampionImage(nowPick.championIndex);
+        setMostColor(true, image);
         setBackColor(pickIndex, 2);
         if(nowPick.equalPhase != null){
             //만약 현재 픽의 앞에 끌 놈이 있다면 끄기
@@ -699,8 +789,13 @@ public class BanPickActivity extends AppCompatActivity {
         //다음픽에 대한 이야기
         //현재 픽 불켜기
         nowPick = ((Match.PickClass)pickSerial.get(pickIndex));
+        image = Champion.getChampionImage(nowPick.championIndex);
+        setMostColor(true, image);
         setBackColor(pickIndex, 1);
-        if(isPickChange == false && nowPick.championIndex != -1){
+        if(lastPickIndex == pickIndex){
+            //만약 마지막 픽타임이라면 픽버튼을 false로
+            setButton_pick(false);
+        }else if(isPickChange == false && nowPick.championIndex != -1 ){
             //만약 픽이 변경되지 않았다면 보여주기
             setImage(pickIndex);
         }

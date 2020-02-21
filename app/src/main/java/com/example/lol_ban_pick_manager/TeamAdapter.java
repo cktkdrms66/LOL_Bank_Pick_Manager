@@ -1,7 +1,6 @@
 package com.example.lol_ban_pick_manager;
 
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +19,10 @@ public class TeamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<Team> mItems;
     private ArrayList<Boolean> mIsClicked = new ArrayList<>();
     private int mOnlyItemPosition = -1;
+
+    public int getmOnlyItemPosition() {
+        return mOnlyItemPosition;
+    }
 
     public void setOnlyClick(int pos, boolean isClick){
         if(isClick){
@@ -62,7 +65,7 @@ public class TeamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ImageView imageView_plus;
         public TeamViewHolder(View view){
             super(view);
-            constraintLayout = view.findViewById(R.id.cardView_layout);
+            constraintLayout = view.findViewById(R.id.cardView_game_layout);
             imageView_plus = view.findViewById(R.id.cardView_team_plus);
             textView_name = view.findViewById(R.id.cardView_team_name);
             textView_backgroud = view.findViewById(R.id.cardView_team_logo_backgroud);
@@ -86,12 +89,12 @@ public class TeamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         if(mIsClicked.get(pos)){
                             mIsClicked.set(pos, false);
                             setOnlyClick(pos, false);
-                            constraintLayout.setBackground(ContextCompat.getDrawable(PopupTeamActivity.context, R.drawable.custom_team_cardview_backgroud));
+                            constraintLayout.setBackgroundResource(R.drawable.custom_team_cardview_backgroud);
 
                         }else{
                             mIsClicked.set(pos, true);
                             setOnlyClick(pos, true);
-                            constraintLayout.setBackground(ContextCompat.getDrawable(PopupTeamActivity.context, R.drawable.custom_team_cardview_backgroud_clicked));
+                            constraintLayout.setBackgroundResource(R.drawable.custom_team_cardview_backgroud_clicked);
                         }
                     }
                 }

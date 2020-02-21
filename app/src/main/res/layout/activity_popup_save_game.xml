@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="370dp"
+    android:layout_height="wrap_content"
+    android:background="#eeeeee"
+    android:orientation="vertical">
+
+    <!-- 타이틀바 -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/save_game_textView_title"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:background="#ff7a00"
+            android:gravity="center"
+            android:text="밴픽 게임 저장"
+            android:textColor="#fff"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_conversion_absoluteHeight="53dp"
+            tools:layout_conversion_absoluteWidth="300dp" />
+
+        <TextView
+            android:id="@+id/save_game_textView_X"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="X"
+            android:textColor="#FFFFFFFF"
+            android:textSize="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- //end 타이틀바 -->
+
+    <!-- Notice -->
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+
+            <TextView
+                android:id="@+id/save_game_textView0"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:text="밴픽 이름"
+                android:textColor="#000000"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/save_game_editText_input"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:maxLength="15"
+                android:selectAllOnFocus="true"
+                android:textSize="15dp"
+                app:layout_constraintBottom_toBottomOf="@+id/save_game_textView0"
+                app:layout_constraintStart_toEndOf="@+id/save_game_textView0"
+                app:layout_constraintTop_toTopOf="@+id/save_game_textView0" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/save_game_textView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:text="승리팀"
+                android:textColor="#000000"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/save_game_back"
+                android:layout_width="73dp"
+                android:layout_height="73dp"
+                android:background="@drawable/team_logo_backgroud"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/save_game_textView"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.519" />
+
+            <ImageView
+                android:id="@+id/save_game_image"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                app:layout_constraintBottom_toBottomOf="@+id/save_game_back"
+                app:layout_constraintEnd_toEndOf="@+id/save_game_back"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/save_game_back"
+                app:layout_constraintTop_toTopOf="@+id/save_game_back"
+                android:src="@drawable/aatrox" />
+
+            <TextView
+                android:id="@+id/save_game_team_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="설정 안함"
+                android:textColor="#000000"
+                android:textSize="16dp"
+                app:layout_constraintEnd_toEndOf="@+id/save_game_back"
+                app:layout_constraintStart_toStartOf="@+id/save_game_back"
+                app:layout_constraintTop_toBottomOf="@+id/save_game_back" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="70dp">
+
+            <TextView
+                android:id="@+id/save_game_textView2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:text="평점"
+                android:textColor="#000000"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/save_game_star0"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="60dp"
+                app:layout_constraintBottom_toBottomOf="@+id/save_game_textView2"
+                app:layout_constraintStart_toEndOf="@+id/save_game_textView2"
+                app:layout_constraintTop_toTopOf="@+id/save_game_textView2"
+                android:src="@drawable/star" />
+
+            <ImageView
+                android:id="@+id/save_game_star1"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="4dp"
+                app:layout_constraintStart_toEndOf="@+id/save_game_star0"
+                app:layout_constraintTop_toTopOf="@+id/save_game_star0"
+                android:src="@drawable/star" />
+
+            <ImageView
+                android:id="@+id/save_game_star2"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="4dp"
+                app:layout_constraintStart_toEndOf="@+id/save_game_star1"
+                app:layout_constraintTop_toTopOf="@+id/save_game_star1"
+                android:src="@drawable/star" />
+
+            <ImageView
+                android:id="@+id/save_game_star3"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="4dp"
+                app:layout_constraintBottom_toBottomOf="@+id/save_game_star2"
+                app:layout_constraintStart_toEndOf="@+id/save_game_star2"
+                app:layout_constraintTop_toTopOf="@+id/save_game_star2"
+                android:src="@drawable/star" />
+
+            <ImageView
+                android:id="@+id/save_game_star4"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="4dp"
+                app:layout_constraintStart_toEndOf="@+id/save_game_star3"
+                app:layout_constraintTop_toTopOf="@+id/save_game_star3"
+                android:src="@drawable/star" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+    <!-- Notice -->
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#66bdbdbd" />
+
+    <!-- 닫기 버튼 -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/save_game_ok"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src ="@drawable/checkicon" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <!--// 닫기 버튼 -->
+</LinearLayout>

@@ -20,7 +20,7 @@
             android:layout_height="50dp"
             android:background="#ff7a00"
             android:gravity="center"
-            android:text="아군팀"
+            android:text="밴픽 게임 선택"
             android:textColor="#fff"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -75,17 +75,27 @@
         android:gravity="center">
 
         <ImageView
-            android:id="@+id/team_imageView_ok"
+            android:id="@+id/game_imageView_ok"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="4dp"
             android:scaleType="centerInside"
+            android:src="@drawable/checkicon"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/checkicon" />
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/game_imgaeView_more"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/game_imageView_ok"
+            app:layout_constraintEnd_toStartOf="@+id/game_imageView_ok"
+            app:layout_constraintTop_toTopOf="@+id/game_imageView_ok"
+            app:srcCompat="@drawable/searchicon" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     <!--// 닫기 버튼 -->

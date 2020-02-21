@@ -20,7 +20,7 @@
             android:layout_height="50dp"
             android:background="#ff7a00"
             android:gravity="center"
-            android:text="밴픽 구성"
+            android:text="매치 구성"
             android:textColor="#fff"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -79,57 +79,6 @@
                 app:layout_constraintBottom_toBottomOf="@+id/make_game_textView0"
                 app:layout_constraintStart_toEndOf="@+id/make_game_textView0"
                 app:layout_constraintTop_toTopOf="@+id/make_game_textView0" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="150dp">
-
-            <RadioGroup
-                android:id="@+id/radioGroup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="76dp"
-                app:layout_constraintBottom_toBottomOf="@+id/make_game_textView1"
-                app:layout_constraintStart_toEndOf="@+id/make_game_textView1"
-                app:layout_constraintTop_toTopOf="@+id/make_game_textView1">
-
-                <RadioButton
-                    android:id="@+id/make_game_radioButton_normal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="일반 게임"
-                    android:textColor="#000000"
-                    android:textSize="12dp" />
-
-                <RadioButton
-                    android:id="@+id/make_game_radioButton_rank"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="랭크 게임"
-                    android:textColor="#000000"
-                    android:textSize="12dp" />
-
-                <RadioButton
-                    android:id="@+id/make_game_radioButton_draft"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="토너먼트 드래프트"
-                    android:textColor="#000000"
-                    android:textSize="12dp" />
-            </RadioGroup>
-
-            <TextView
-                android:id="@+id/make_game_textView1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:text="게임 모드"
-                android:textColor="#000000"
-                android:textSize="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -236,24 +185,18 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:gravity="center">
 
-        <TextView
-            android:id="@+id/make_game_textView_next"
+        <ImageView
+            android:id="@+id/make_game_ok"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:layout_marginTop="4dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="4dp"
-            android:gravity="center"
-            android:text="&gt;"
-            android:textColor="#000000"
-            android:textSize="30dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
+            app:layout_constraintTop_toTopOf="parent"
+            android:src ="@drawable/checkicon" />
     </androidx.constraintlayout.widget.ConstraintLayout>
     <!--// 닫기 버튼 -->
 </LinearLayout>

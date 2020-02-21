@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class PopupTeamActivity extends Activity {
+public class PopupGameActivity extends Activity {
 
     TextView textView_title;
     TextView textView_X;
@@ -26,69 +26,60 @@ public class PopupTeamActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_popup_team);
+        setContentView(R.layout.activity_popup_game);
         context = this;
 
         final Intent intent = getIntent();
-        final boolean isOurTeam = intent.getExtras().getBoolean("isOurTeam");
-
+        final int matchIndex = intent.getExtras().getInt("matchIndex");
 
         textView_title = findViewById(R.id.game_textView_title);
         textView_X = findViewById(R.id.game_textView_X);
-        imageView_ok = findViewById(R.id.team_imageView_ok);
+        imageView_ok = findViewById(R.id.game_imageView_ok);
         recyclerView_teams = findViewById(R.id.game_recyclerView_games);
 
 
-        if(isOurTeam){
-            textView_title.setText("아군팀");
-        }else{
-            textView_title.setText("상대팀");
-        }
 
         recyclerView_teams.setHasFixedSize(true);
         recyclerView_teams.setLayoutManager(new LinearLayoutManager(this));
 
-        final TeamAdapter adapter = new TeamAdapter(ApplicationClass.teams);
+        final GameAdapter adapter = new GameAdapter(ApplicationClass.matches.get(matchIndex).games);
         recyclerView_teams.setAdapter(adapter);
 
 
         textView_X.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent.putExtra("teamIndex", 1);
-                setResult(RESULT_OK, intent);
                 finish();
             }
         });
+
 
         imageView_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int teamIndex = adapter.getmOnlyItemPosition();
-                if(teamIndex == -1){
+                int gameIndex = adapter.getmOnlyItemPosition();
+                if(gameIndex == -1){
                     return;
                 }
-                int teamLogo = adapter.getTeamLogo();
-                String teamName = adapter.getTeamName();
-                PopupMakeGameActivity popupMakeGameActivityContext = (PopupMakeGameActivity)PopupMakeGameActivity.context;
-                if(isOurTeam){
-
-                    popupMakeGameActivityContext.imageView_team0_logo
-                            .setImageResource(teamLogo);
-                    popupMakeGameActivityContext.textView_team0_name
-                            .setText(teamName);
-                }else{
-                    popupMakeGameActivityContext.imageView_team1_logo
-                            .setImageResource(teamLogo);
-                    popupMakeGameActivityContext.textView_team1_name
-                            .setText(teamName);
-                }
-                intent.putExtra("teamIndex", teamIndex);
-                setResult(RESULT_OK, intent);
                 finish();
+                Intent intent2 = new Intent(getApplicationContext(), BanPickActivity.class);
+                intent2.putExtra("matchIndex", matchIndex);
+                intent2.putExtra("gameIndex", adapter.getmOnlyItemPosition());
+                startActivity(intent);
             }
         });
 
+        adapter.setOnItemClickListener(new GameAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v) {
+
+                Intent intent1 = new Intent(getApplicationContext(), BanPickActivity.class);
+                intent1.putExtra("matchIndex", matchIndex);
+                intent1.putExtra("gameIndex", 0);
+                startActivity(intent1);
+                finish();
+            }
+        });
 
 
 
