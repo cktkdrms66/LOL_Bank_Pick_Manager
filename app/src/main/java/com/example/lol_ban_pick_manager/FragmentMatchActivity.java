@@ -28,7 +28,7 @@ public class FragmentMatchActivity extends Fragment {
         View view = inflater.inflate(R.layout.fragment_match,container,false);
 
         imageView_search = view.findViewById(R.id.match_imageView_search);
-        recyclerView = view.findViewById(R.id.match_recyclerView);
+        recyclerView = view.findViewById(R.id.team_recyclerView);
 
 
         imageView_search.setOnClickListener(new View.OnClickListener() {
@@ -49,7 +49,7 @@ public class FragmentMatchActivity extends Fragment {
             public void onItemClick(View v, int pos) {
                 Intent intent;
                 if(ApplicationClass.matches.get(pos).type == 0){
-                    intent = new Intent(MainActivity.context, PopupMakeGameActivity.class);
+                    intent = new Intent(MainActivity.context, PopupMakeMatchActivity.class);
                 }else{
                     intent = new Intent(MainActivity.context, PopupGameActivity.class);
                     intent.putExtra("matchIndex", pos);

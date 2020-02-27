@@ -1,9 +1,7 @@
 package com.example.lol_ban_pick_manager;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -11,13 +9,12 @@ import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
-public class PopupMakeGameActivity extends Activity {
+public class PopupMakeMatchActivity extends Activity {
 
     String matchName;
     boolean isDefaultPosition = true;
@@ -54,7 +51,7 @@ public class PopupMakeGameActivity extends Activity {
         editText_match_name = findViewById(R.id.make_game_editText_input);
         imageView_change = findViewById(R.id.make_game_imageView_change);
 
-        editText_match_name.setText("매치 " + (ApplicationClass.totalMatchNum));
+        editText_match_name.setText("매치 " + (ApplicationClass.totalMatchNum + 1));
 
         textView_X.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,7 +63,21 @@ public class PopupMakeGameActivity extends Activity {
         imageView_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CustomDialog customDialog = new CustomDialog(PopupMakeGameActivity.this);
+                matchName = editText_match_name.getText().toString();
+                if(matchName.length() < 2){
+                    ApplicationClass.showToast(getApplicationContext(), "이름을 2글자 이상으로 설정해주세요.");
+                    return;
+                }else if(matchName.length() > 15){
+                    ApplicationClass.showToast(getApplicationContext(), "이름을 15글자 이하로 설정해주세요.");
+                    return;
+                }
+                for(int i = 1; i < ApplicationClass.matches.size(); i++){
+                    if(ApplicationClass.matches.get(i).name.equals(matchName)){
+                        ApplicationClass.showToast(getApplicationContext(), "중복된 이름입니다.");
+                        return;
+                    }
+                }
+                CustomDialog customDialog = new CustomDialog(PopupMakeMatchActivity.this);
                 customDialog.callFunction("이대로 진행하시겠습니까?");
                 customDialog.setOnOkClickListener(new CustomDialog.OnOkClickListener() {
                     @Override
@@ -75,9 +86,8 @@ public class PopupMakeGameActivity extends Activity {
                         matchName = editText_match_name.getText().toString();
                         Team team0 = ApplicationClass.teams.get(team0Index);
                         Team team1 = ApplicationClass.teams.get(team1Index);
-                        Match match = Match.makeMatch(matchName, team0, team1, isDefaultPosition, 0, Match.makeDefaultgames());
-                        ApplicationClass.saveMatch(match);
-                        intent.putExtra("matchIndex", ApplicationClass.totalMatchNum-1);
+                        Match.makeMatch(matchName, team0, team1, isDefaultPosition, 0, Match.makeDefaultgames());
+                        intent.putExtra("matchIndex", ApplicationClass.matches.size()-1);
                         intent.putExtra("gameIndex", 0);
                         startActivity(intent);
                         finish();
@@ -106,7 +116,7 @@ public class PopupMakeGameActivity extends Activity {
         imageView_team0_logo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), PopupTeamActivity.class);
+                Intent intent = new Intent(getApplicationContext(), SelectTeamActivity.class);
                 intent.putExtra("isOurTeam", true);
                 startActivityForResult(intent, 0);
             }
@@ -115,7 +125,7 @@ public class PopupMakeGameActivity extends Activity {
         imageView_team1_logo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), PopupTeamActivity.class);
+                Intent intent = new Intent(getApplicationContext(), SelectTeamActivity.class);
                 intent.putExtra("isOurTeam", false);
                 startActivityForResult(intent, 1);
             }

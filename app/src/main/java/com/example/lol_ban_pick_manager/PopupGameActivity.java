@@ -18,6 +18,7 @@ public class PopupGameActivity extends Activity {
 
     TextView textView_title;
     TextView textView_X;
+    ImageView imageView_plus;
     ImageView imageView_ok;
     RecyclerView recyclerView_teams;
     static Context context;
@@ -32,6 +33,7 @@ public class PopupGameActivity extends Activity {
         final Intent intent = getIntent();
         final int matchIndex = intent.getExtras().getInt("matchIndex");
 
+        imageView_plus = findViewById(R.id.game_plus);
         textView_title = findViewById(R.id.game_textView_title);
         textView_X = findViewById(R.id.game_textView_X);
         imageView_ok = findViewById(R.id.game_imageView_ok);
@@ -61,23 +63,25 @@ public class PopupGameActivity extends Activity {
                 if(gameIndex == -1){
                     return;
                 }
+
                 finish();
+                ((BanPickActivity)BanPickActivity.context).finish();
                 Intent intent2 = new Intent(getApplicationContext(), BanPickActivity.class);
                 intent2.putExtra("matchIndex", matchIndex);
                 intent2.putExtra("gameIndex", adapter.getmOnlyItemPosition());
-                startActivity(intent);
+                startActivity(intent2);
             }
         });
 
         adapter.setOnItemClickListener(new GameAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v) {
-
+                finish();
+                ((BanPickActivity)BanPickActivity.context).finish();
                 Intent intent1 = new Intent(getApplicationContext(), BanPickActivity.class);
                 intent1.putExtra("matchIndex", matchIndex);
                 intent1.putExtra("gameIndex", 0);
                 startActivity(intent1);
-                finish();
             }
         });
 

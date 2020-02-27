@@ -17,44 +17,16 @@ import java.util.ArrayList;
 public class TeamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private ArrayList<Team> mItems;
-    private ArrayList<Boolean> mIsClicked = new ArrayList<>();
-    private int mOnlyItemPosition = -1;
-
-    public int getmOnlyItemPosition() {
-        return mOnlyItemPosition;
+    private OnItemClickListener mListener = null;
+    public interface OnItemClickListener{
+        void onItemClick(View v, int pos);
     }
 
-    public void setOnlyClick(int pos, boolean isClick){
-        if(isClick){
-            if(mOnlyItemPosition != -1){
-                mIsClicked.set(mOnlyItemPosition, false);
-            }
-            mOnlyItemPosition = pos;
-            notifyDataSetChanged();
-        }else{
-            mOnlyItemPosition = -1;
-        }
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.mListener = listener;
     }
 
-    public Team getTeam(){
-        if(mOnlyItemPosition == -1){
-            return mItems.get(1);
-        }
-        return mItems.get(mOnlyItemPosition);
-    }
-    public int getTeamLogo(){
-        if(mOnlyItemPosition == -1){
-            return R.drawable.normal_team_logo;
-        }
-        return mItems.get(mOnlyItemPosition).logo;
 
-    }
-    public String getTeamName(){
-        if(mOnlyItemPosition == -1){
-            return "기본팀";
-        }
-        return mItems.get(mOnlyItemPosition).name;
-    }
     public class TeamViewHolder extends RecyclerView.ViewHolder{
         ConstraintLayout constraintLayout;
         TextView textView_name;
@@ -86,15 +58,8 @@ public class TeamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 public void onClick(View view) {
                     int pos = getAdapterPosition();
                     if(pos != RecyclerView.NO_POSITION){
-                        if(mIsClicked.get(pos)){
-                            mIsClicked.set(pos, false);
-                            setOnlyClick(pos, false);
-                            constraintLayout.setBackgroundResource(R.drawable.custom_team_cardview_backgroud);
-
-                        }else{
-                            mIsClicked.set(pos, true);
-                            setOnlyClick(pos, true);
-                            constraintLayout.setBackgroundResource(R.drawable.custom_team_cardview_backgroud_clicked);
+                        if(mListener != null){
+                            mListener.onItemClick(view, pos);
                         }
                     }
                 }
@@ -104,9 +69,7 @@ public class TeamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public TeamAdapter(ArrayList<Team> mItems){
         this.mItems = mItems;
-        for(int i = 0; i < mItems.size(); i++){
-            mIsClicked.add(false);
-        }
+        
     }
 
     @NonNull
@@ -133,14 +96,6 @@ public class TeamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 new_holder.textView_player[i].setText(tear);
                 new_holder.imageView_color[i].setColorFilter(Team.tear_color(tear), PorterDuff.Mode.SRC_IN);
             }
-            if(mIsClicked.get(position)){
-                new_holder.constraintLayout.setBackground(ContextCompat.getDrawable(PopupTeamActivity.context,
-                        R.drawable.custom_team_cardview_backgroud_clicked));
-            }else{
-                new_holder.constraintLayout.setBackground(ContextCompat.getDrawable(PopupTeamActivity.context,
-                        R.drawable.custom_team_cardview_backgroud));
-            }
-
 
     }
 

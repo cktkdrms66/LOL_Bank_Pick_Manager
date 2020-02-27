@@ -112,6 +112,20 @@ public class PopupSaveGameActivity extends Activity {
             @Override
             public void onClick(View view) {
                 gameName = editText.getText().toString();
+                if(gameName.length() < 2){
+                    ApplicationClass.showToast(getApplicationContext(), "이름을 2글자 이상으로 설정해주세요.");
+                    return;
+                }else if(gameName.length() > 15){
+                    ApplicationClass.showToast(getApplicationContext(), "이름을 15글자 이하로 설정해주세요.");
+                    return;
+                }
+                Match match = ApplicationClass.matches.get(matchIndex);
+                for(int i = 1; i < match.games.size(); i++){
+                    if(match.games.get(i).name.equals(gameName)){
+                        ApplicationClass.showToast(getApplicationContext(), "중복된 이름입니다.");
+                        return;
+                    }
+                }
                 Intent intent1 = new Intent();
                 intent1.putExtra("star", star);
                 intent1.putExtra("gameName", gameName);

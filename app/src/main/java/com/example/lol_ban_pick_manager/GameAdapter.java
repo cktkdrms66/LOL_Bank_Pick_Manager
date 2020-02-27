@@ -57,11 +57,12 @@ public class GameAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         TextView textView_name;
         TextView textView;
         ImageView imageView;
+        TextView textView_back;
         ImageView[] imageViews = new ImageView[5];
         ImageView imageView_plus;
         public GameViewHolder(View view){
             super(view);
-
+            textView_back = view.findViewById(R.id.game_back);
             imageView_plus = view.findViewById(R.id.game_plus);
             textView = view.findViewById(R.id.game_textView);
             constraintLayout = view.findViewById(R.id.cardView_game_layout);
@@ -122,6 +123,7 @@ public class GameAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if(mItems.get(position).type == 0){
             new_holder.textView.setVisibility(View.INVISIBLE);
             new_holder.imageView_plus.setImageResource(R.drawable.plus);
+            new_holder.textView_back.setVisibility(View.INVISIBLE);
             for(int i = 0; i <5; i++){
                 new_holder.imageViews[i].setVisibility(View.INVISIBLE);
             }

@@ -22,8 +22,7 @@ public class ChampionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private ArrayList<Boolean> mIsClicked = new ArrayList<>();
     private ArrayList<Boolean> mIsPicked = new ArrayList<>();
     private int mOnlyItemPosition = -1;
-    private OnItemClickListener mListener = null;
-
+    OnItemClickListener mListener = null;
 
     public int getmOnlyItemPosition() {
         return mOnlyItemPosition;
@@ -39,7 +38,7 @@ public class ChampionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         mIsClicked.set(pos,b);
     }
     public interface OnItemClickListener{
-        void onItemClick(View v, int pos, ImageView imageView);
+        void onItemClick(int pos, ImageView imageView);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener){
@@ -105,7 +104,8 @@ public class ChampionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             if(mIsPicked.get(pos)){
                                 return;
                             }
-                            mListener.onItemClick(view, pos, imageView);
+
+                            mListener.onItemClick(pos, imageView);
                         }
                     }
                 }

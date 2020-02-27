@@ -35,6 +35,16 @@
                 app:layout_constraintStart_toEndOf="@+id/game_logo"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:id="@+id/game_back"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/team_logo_backgroud"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <ImageView
                 android:id="@+id/game_plus"
                 android:layout_width="50dp"
@@ -43,7 +53,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/nothing" />
+                android:src="@drawable/nothing" />
 
             <TextView
                 android:id="@+id/game_textView"
@@ -59,13 +69,13 @@
 
             <ImageView
                 android:id="@+id/game_logo"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/aphelios" />
+                android:layout_width="47dp"
+                android:layout_height="47dp"
+                android:src="@drawable/aphelios"
+                app:layout_constraintBottom_toBottomOf="@+id/game_back"
+                app:layout_constraintEnd_toEndOf="@+id/game_back"
+                app:layout_constraintStart_toStartOf="@+id/game_back"
+                app:layout_constraintTop_toTopOf="@+id/game_back" />
 
             <ImageView
                 android:id="@+id/game_star0"
@@ -75,7 +85,7 @@
                 android:foregroundGravity="center"
                 app:layout_constraintBottom_toBottomOf="@+id/game_star1"
                 app:layout_constraintEnd_toStartOf="@+id/game_star1"
-                app:srcCompat="@drawable/star" />
+                android:src="@drawable/star" />
 
             <ImageView
                 android:id="@+id/game_star1"
@@ -85,7 +95,7 @@
                 android:foregroundGravity="center"
                 app:layout_constraintBottom_toBottomOf="@+id/game_star2"
                 app:layout_constraintEnd_toStartOf="@+id/game_star2"
-                app:srcCompat="@drawable/star" />
+                android:src="@drawable/star" />
 
             <ImageView
                 android:id="@+id/game_star2"
@@ -95,7 +105,7 @@
                 android:foregroundGravity="center"
                 app:layout_constraintBottom_toBottomOf="@+id/game_star3"
                 app:layout_constraintEnd_toStartOf="@+id/game_star3"
-                app:srcCompat="@drawable/star" />
+                android:src="@drawable/star" />
 
             <ImageView
                 android:id="@+id/game_star3"
@@ -105,7 +115,7 @@
                 android:foregroundGravity="center"
                 app:layout_constraintBottom_toBottomOf="@+id/game_star4"
                 app:layout_constraintEnd_toStartOf="@+id/game_star4"
-                app:srcCompat="@drawable/star" />
+                android:src="@drawable/star" />
 
             <ImageView
                 android:id="@+id/game_star4"
@@ -116,7 +126,7 @@
                 android:foregroundGravity="center"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:srcCompat="@drawable/star" />
+                android:src="@drawable/star" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -71,25 +71,26 @@ public class BanPickActivity extends AppCompatActivity {
     boolean isPickChange;
     int swapIndex;
 
-    private int[][] mostImage0;
-    private int[][] mostImage1;
+     int[][] mostImage0;
+     int[][] mostImage1;
     ArrayList<Match.GameElement> pickSerial;
-    private boolean[] isImageClickedTeam0;
-    private boolean[] isImageClickedTeam1;
-    private int clickedIndex0;
-    private int clickedIndex1;
-    private int lastPickIndex;
-    private int pickIndex;
-    private Match match;
-    private Match.Game game;
-    private int matchIndex;
-    private int gameIndex;
+     boolean[] isImageClickedTeam0;
+     boolean[] isImageClickedTeam1;
+     int clickedIndex0;
+    int clickedIndex1;
+    int lastPickIndex;
+    int pickIndex;
+    Match match;
+    Match.Game game;
+     int matchIndex;
+     int gameIndex;
     Team team0;
     Team team1;
-    private Match.SwapPhaseClass swapPhaseClass;
+     Match.SwapPhaseClass swapPhaseClass;
 
    
 
+    
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,10 +125,14 @@ public class BanPickActivity extends AppCompatActivity {
 
         //게임 객체 만들기
         gameIndex = intent.getExtras().getInt("gameIndex");
+        System.out.println(gameIndex);
         if(gameIndex == 0){
             game = new Match.Game();
         }else{
             game = match.games.get(gameIndex);
+            lastPickIndex = game.gameElements.size() - 1;
+            System.out.println(lastPickIndex + " second lastPick");
+            isPickChange = false;
         }
         pickSerial = game.gameElements;
 
@@ -283,7 +288,7 @@ public class BanPickActivity extends AppCompatActivity {
 
         adapter.setOnItemClickListener(new ChampionAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(View v, int pos, ImageView imageView) {
+            public void onItemClick(int pos, ImageView imageView) {
                 if(isLast){
                     return;
                 }
@@ -291,7 +296,6 @@ public class BanPickActivity extends AppCompatActivity {
                     int image = Champion.getChampionImage(adapter.getmOnlyItemPosition());
                     setMostColor(false, image);
 
-                    imageView.setColorFilter(Color.parseColor("#696969"), PorterDuff.Mode.MULTIPLY);
                     adapter.setIsClicked(pos, true);
                     adapter.setOnlyClick(pos, true);
 
@@ -396,17 +400,18 @@ public class BanPickActivity extends AppCompatActivity {
                 int star = data.getExtras().getInt("star");
                 String gameName = data.getExtras().getString("gameName");
                 int victoryType = data.getExtras().getInt("victoryType");
-                game.star = star;
-                game.name = gameName;
+                int image;
                 if(victoryType == 0){
-                    game.victoryTeamLogo = match.team0.logo;
+                    image = match.team0.logo;
                 }else if(victoryType == 1){
-                    game.victoryTeamLogo = match.team1.logo;
+                    image = match.team1.logo;
                 }else{
-                    game.victoryTeamLogo = R.drawable.nothing;
+                    image = R.drawable.nothing;
                 }
-
-                ApplicationClass.addGame(match, game);
+                Match.Game newGame = new Match.Game();
+                newGame.setGame(gameName, image, star);
+                ApplicationClass.addGame(match, newGame);
+                System.out.println(lastPickIndex + " lastPickIndex");
                 ApplicationClass.showToast(context, "저장이 완료되었습니다.");
             }
         }
@@ -451,6 +456,8 @@ public class BanPickActivity extends AppCompatActivity {
         return super.onContextItemSelected(item);
     }
 
+
+
     //메뉴 메소드들
     public void menuSave(){
         if(lastPickIndex != pickSerial.size()-1){
@@ -462,6 +469,7 @@ public class BanPickActivity extends AppCompatActivity {
         intent.putExtra("team1Name", team1.name);
         intent.putExtra("team0Image", team0.logo);
         intent.putExtra("team1Image", team1.logo);
+        intent.putExtra("matchIndex", matchIndex);
         startActivityForResult(intent, 0);
 
     }
@@ -602,6 +610,11 @@ public class BanPickActivity extends AppCompatActivity {
 
     public void settingTeamArr(boolean isDefaultPosition){
 
+        if(pickSerial.size() > 0){
+            swapPhaseClass = (Match.SwapPhaseClass)pickSerial.get(pickSerial.size()-1);
+            return;
+        }
+        int id = 0;
         int blueTeamBanIndex = 0;
         int redTeamBanIndex = 0;
         int blueTeamPickIndex = 0;
@@ -613,34 +626,34 @@ public class BanPickActivity extends AppCompatActivity {
             redTeam = true;
         }
 
-        pickSerial.add(new Match.PickClass(0, blueTeam, blueTeamBanIndex++));
-        pickSerial.add(new Match.PickClass(0, redTeam,redTeamBanIndex++));
-        pickSerial.add(new Match.PickClass(0, blueTeam,blueTeamBanIndex++));
-        pickSerial.add(new Match.PickClass(0, redTeam,redTeamBanIndex++));
-        pickSerial.add(new Match.PickClass(0, blueTeam,blueTeamBanIndex++));
-        pickSerial.add(new Match.PickClass(0, redTeam,redTeamBanIndex++));
+        pickSerial.add(new Match.PickClass(0, blueTeam, blueTeamBanIndex++, id++));
+        pickSerial.add(new Match.PickClass(0, redTeam,redTeamBanIndex++, id++));
+        pickSerial.add(new Match.PickClass(0, blueTeam,blueTeamBanIndex++, id++));
+        pickSerial.add(new Match.PickClass(0, redTeam,redTeamBanIndex++, id++));
+        pickSerial.add(new Match.PickClass(0, blueTeam,blueTeamBanIndex++, id++));
+        pickSerial.add(new Match.PickClass(0, redTeam,redTeamBanIndex++, id++));
 
-        pickSerial.add(new Match.PickClass(1, blueTeam,blueTeamPickIndex++));
-        pickSerial.add(new Match.PickClass(1, redTeam,redTeamPickIndex++));
-        pickSerial.add(new Match.PickClass(1, redTeam,redTeamPickIndex++));
+        pickSerial.add(new Match.PickClass(1, blueTeam,blueTeamPickIndex++, id++));
+        pickSerial.add(new Match.PickClass(1, redTeam,redTeamPickIndex++, id++));
+        pickSerial.add(new Match.PickClass(1, redTeam,redTeamPickIndex++, id++));
         game.makePickClassEqaulPhase();
-        pickSerial.add(new Match.PickClass(1, blueTeam,blueTeamPickIndex++));
-        pickSerial.add(new Match.PickClass(1, blueTeam,blueTeamPickIndex++));
+        pickSerial.add(new Match.PickClass(1, blueTeam,blueTeamPickIndex++, id++));
+        pickSerial.add(new Match.PickClass(1, blueTeam,blueTeamPickIndex++, id++));
         game.makePickClassEqaulPhase();
-        pickSerial.add(new Match.PickClass(1, redTeam,redTeamPickIndex++));
+        pickSerial.add(new Match.PickClass(1, redTeam,redTeamPickIndex++, id++));
 
-        pickSerial.add(new Match.PickClass(0, redTeam,redTeamBanIndex++));
-        pickSerial.add(new Match.PickClass(0, blueTeam,blueTeamBanIndex++));
-        pickSerial.add(new Match.PickClass(0, redTeam,redTeamBanIndex++));
-        pickSerial.add(new Match.PickClass(0, blueTeam,blueTeamBanIndex++));
+        pickSerial.add(new Match.PickClass(0, redTeam,redTeamBanIndex++, id++));
+        pickSerial.add(new Match.PickClass(0, blueTeam,blueTeamBanIndex++, id++));
+        pickSerial.add(new Match.PickClass(0, redTeam,redTeamBanIndex++, id++));
+        pickSerial.add(new Match.PickClass(0, blueTeam,blueTeamBanIndex++, id++));
 
-        pickSerial.add(new Match.PickClass(1, redTeam,redTeamPickIndex++));
-        pickSerial.add(new Match.PickClass(1, blueTeam,blueTeamPickIndex++));
-        pickSerial.add(new Match.PickClass(1, blueTeam,blueTeamPickIndex++));
+        pickSerial.add(new Match.PickClass(1, redTeam,redTeamPickIndex++, id++));
+        pickSerial.add(new Match.PickClass(1, blueTeam,blueTeamPickIndex++, id++));
+        pickSerial.add(new Match.PickClass(1, blueTeam,blueTeamPickIndex++, id++));
         game.makePickClassEqaulPhase();
-        pickSerial.add(new Match.PickClass(1, redTeam,redTeamPickIndex++));
+        pickSerial.add(new Match.PickClass(1, redTeam,redTeamPickIndex++, id++));
 
-        pickSerial.add(new Match.SwapPhaseClass());
+        pickSerial.add(new Match.SwapPhaseClass(id));
         swapPhaseClass = (Match.SwapPhaseClass)pickSerial.get(pickSerial.size()-1);
 
 
@@ -706,7 +719,7 @@ public class BanPickActivity extends AppCompatActivity {
             //모스트 중 회색 컬러 필터를 제거한다
             int image = Champion.getChampionImage(nowPick.championIndex);
             setMostColor(false, image);
-            if(nowPick.equalPhase != null){
+            if(nowPick.equalPhase != -1){
                 if(nowPick.isFirst){
                     //현재 픽과 같은 페이즈가 있고 현재 픽이 앞이라면 둘다 불을 끈다.
                     setBackColor(pickIndex, 0);
@@ -734,7 +747,7 @@ public class BanPickActivity extends AppCompatActivity {
         Match.PickClass nowPick = (Match.PickClass) pickSerial.get(pickIndex);
         setBackColor(pickIndex, 1);
         setImage(pickIndex);
-        if(nowPick.equalPhase != null){
+        if(nowPick.equalPhase != -1){
             if(nowPick.isFirst == false){
                 //만약 또 불을 앞에 켜야될 놈이 있으면 켜준다
                 setBackColor(pickIndex-1, 1);
@@ -766,7 +779,7 @@ public class BanPickActivity extends AppCompatActivity {
         int image = Champion.getChampionImage(nowPick.championIndex);
         setMostColor(true, image);
         setBackColor(pickIndex, 2);
-        if(nowPick.equalPhase != null){
+        if(nowPick.equalPhase != -1){
             //만약 현재 픽의 앞에 끌 놈이 있다면 끄기
             if(nowPick.isFirst == false){
                 setBackColor(pickIndex-1, 2);
@@ -780,6 +793,7 @@ public class BanPickActivity extends AppCompatActivity {
         //마지막이라면
         if(pickIndex + 1 == pickSerial.size()){
             isLast = true;
+            setButton_pick(false);
             swapAvailable();
             swapIndex = 0;
             return;
@@ -795,11 +809,17 @@ public class BanPickActivity extends AppCompatActivity {
         if(lastPickIndex == pickIndex){
             //만약 마지막 픽타임이라면 픽버튼을 false로
             setButton_pick(false);
+
         }else if(isPickChange == false && nowPick.championIndex != -1 ){
             //만약 픽이 변경되지 않았다면 보여주기
             setImage(pickIndex);
+
+            adapter.setIsClicked(nowPick.championIndex, true);
+            adapter.setOnlyClick(nowPick.championIndex, true);
+            setButton_pick(true);
+
         }
-        if(nowPick.equalPhase != null){
+        if(nowPick.equalPhase != -1){
             //뒤에 불 킬 놈이 있다면 키기
             if(nowPick.isFirst){
                 setBackColor(pickIndex+1, 1);
@@ -848,9 +868,8 @@ public class BanPickActivity extends AppCompatActivity {
         setBackColor(pickIndex, 1);
         nowPick = ((Match.PickClass)pickSerial.get(pickIndex));
         //같은 페이즈에 픽이 하나가 아니고, 뒤에 불킬 놈 있을 때
-        if(nowPick.equalPhase != null){
+        if(nowPick.equalPhase != -1){
             if(nowPick.isFirst){
-                System.out.println(pickIndex + " " + nowPick.equalPhase.index);
                 setBackColor(pickIndex +1, 1);
             }
         }

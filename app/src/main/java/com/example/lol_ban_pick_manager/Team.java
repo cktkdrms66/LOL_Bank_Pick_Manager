@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 public class Team {
 
-    int id;
     String name;
     int logo;
     int type;
@@ -14,7 +13,6 @@ public class Team {
 
 
     public static class Player{
-        int id;
         int type;
         String name;
         String tear;
@@ -29,7 +27,6 @@ public class Team {
             }
             else if(i == 1){
                 type = 1;
-                id = ApplicationClass.playerID++;
                 name = "이름없는 소환사";
                 tear = "UN";
             }
@@ -43,12 +40,10 @@ public class Team {
         public static Player makeDefaultPlayer(){
             Player player = new Player(1);
             ApplicationClass.players.add(player);
-            ApplicationClass.totalPlayerNum++;
             return player;
         }
         public Player(String name, String tear, ArrayList<Champion> most){
             type = 2;
-            this.id = ApplicationClass.playerID++;
             this.champNum = most.size();
             this.name = name;
             this.tear = tear;
@@ -57,7 +52,6 @@ public class Team {
     }
 
     Team(int i){
-        id = ApplicationClass.teamID++;
         if(i == 0){
             name = " ";
             logo = R.drawable.nothing;
@@ -73,7 +67,6 @@ public class Team {
         }
     }
     Team(String name, int logo, Player[] players){
-        id = ApplicationClass.teamID++;
         this.type = 2;
         this.name = name;
         this.logo = logo;
@@ -88,7 +81,10 @@ public class Team {
         return champions;
     }
     public static Player makePlayer(String name, String tear, ArrayList<Champion> champions){
-        return new Player(name, tear, champions);
+        Player player = new Player(name, tear, champions);
+        ApplicationClass.players.add(player);
+        ApplicationClass.savePlayer(player);
+        return player;
     }
     public static Player makePlayer(String name, String tear, String... champions){
         return new Player(name, tear, makeMost(champions));
@@ -113,14 +109,13 @@ public class Team {
     public static Team makeDefaultTeam(){
         Team team = new Team(1);
         ApplicationClass.teams.add(team);
-        ApplicationClass.totalTeamNum++;
         return team;
     }
 
     public static Team makeTeam(String name, int logo, Player[] players){
         Team team = new Team(name, logo, players);
         ApplicationClass.teams.add(team);
-        ApplicationClass.totalTeamNum++;
+        ApplicationClass.saveTeam(team);
         return team;
     }
 
