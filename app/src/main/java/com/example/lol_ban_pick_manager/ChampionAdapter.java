@@ -101,9 +101,12 @@ public class ChampionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     int pos = getAdapterPosition();
                     if(pos != RecyclerView.NO_POSITION){
                         if(mListener != null){
-                            if(mIsPicked.get(pos)){
-                                return;
+                            if(pos < mIsPicked.size()){
+                                if(mIsPicked.get(pos)){
+                                    return;
+                                }
                             }
+
 
                             mListener.onItemClick(pos, imageView);
                         }
@@ -133,14 +136,16 @@ public class ChampionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ChampionViewHolder new_holder = (ChampionViewHolder) holder;
         new_holder.textView.setText(mItems.get(position).name);
         new_holder.imageView.setImageResource(mItems.get(position).image);
-        if(mIsPicked.get(position)){
-            new_holder.imageView.setColorFilter(Color.parseColor("#D81B60"), PorterDuff.Mode.DST);
-            new_holder.imageView.setColorFilter(Color.parseColor("#696969"), PorterDuff.Mode.MULTIPLY);
-        }else{
-            if(mIsClicked.get(position)){
-                new_holder.imageView.setColorFilter(Color.parseColor("#FFABB5B8"), PorterDuff.Mode.MULTIPLY);
-            }else{
-                new_holder.imageView.setColorFilter(Color.parseColor("#FFABB5B8"), PorterDuff.Mode.DST);
+        if(position < mIsPicked.size()){
+            if(mIsPicked.get(position)){
+                new_holder.imageView.setColorFilter(Color.parseColor("#D81B60"), PorterDuff.Mode.DST);
+                new_holder.imageView.setColorFilter(Color.parseColor("#696969"), PorterDuff.Mode.MULTIPLY);
+            } else{
+                if(mIsClicked.get(position)){
+                    new_holder.imageView.setColorFilter(Color.parseColor("#FFABB5B8"), PorterDuff.Mode.MULTIPLY);
+                }else{
+                    new_holder.imageView.setColorFilter(Color.parseColor("#FFABB5B8"), PorterDuff.Mode.DST);
+                }
             }
         }
 

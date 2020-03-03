@@ -43,23 +43,32 @@ public class ApplicationClass extends Application {
     static ArrayList<Match> matches = new ArrayList<>();
     static ArrayList<Team.Player> players = new ArrayList<>();
 
+    static boolean isNeedToSetting = true;
+
     @Override
     public void onCreate() {
         super.onCreate();
-
-        Champion.championSetting();
-        Paper.init(this);
-
-        Paper.book().destroy();
-        Team.Player.makePlus();
-        Team.makePlus();
-        Match.makePlus();
-        Team.makeDefaultTeam();
-
-        loadData();
-
+        isNeedToSetting = true;
     }
 
+    public static Bitmap StringToBitmap(String encodedString) {
+        try {
+            byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        } catch (Exception e) {
+            e.getMessage(); return null;
+        }
+    }
+    public static String BitmapToString(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 70, baos);
+        byte[] bytes = baos.toByteArray();
+        String temp = Base64.encodeToString(bytes, Base64.DEFAULT);
+        return temp;
+    }
+
+    
     public static void saveMatch(Match match){
         int index = ApplicationClass.totalMatchNum++;
         String string = "Match" + index;
@@ -75,15 +84,62 @@ public class ApplicationClass extends Application {
             }
         }
     }
+    public static void removeMatch(int matchIndex){
+        matches.remove(matchIndex);
+        for(int i = 1; i < matches.size(); i++){
+            String string = "Match" + (i-1);
+            Paper.book().write(string, matches.get(i));
+        }
+        totalMatchNum--;
+        Paper.book().write("totalMatchNum", totalMatchNum);
+
+    }
     public static void saveTeam(Team team){
         int index = ApplicationClass.totalTeamNum++;
         Paper.book().write("Team" + index, team);
         Paper.book().write("totalTeamNum", index);
     }
+    public static void saveReTeam(Team team){
+        for(int i = 1; i < teams.size(); i++){
+            if(teams.get(i) == team){
+                String string = "Team" + (i-1);
+                Paper.book().write(string, team);
+                break;
+            }
+        }
+    }
+    public static void removeTeam(int teamIndex){
+        teams.remove(teamIndex);
+        for(int i = 1; i < teams.size(); i++){
+            String string = "Team" + (i-1);
+            Paper.book().write(string, teams.get(i));
+        }
+        totalTeamNum--;
+        Paper.book().write("totalTeamNum", totalTeamNum);
+    }
+    
     public static void savePlayer(Team.Player player){
         int index = ApplicationClass.totalPlayerNum++;
         Paper.book().write("Player" + index, player);
         Paper.book().write("totalTeamNum", index);
+    }
+    public static void saveRePlayer(Team.Player player){
+        for(int i = 1; i < players.size(); i++){
+            if(players.get(i) == player){
+                String string = "Player" + (i-1);
+                Paper.book().write(string, player);
+                break;
+            }
+        }
+    }
+    public static void removePlayer(int PlayerIndex){
+        players.remove(PlayerIndex);
+        for(int i = 1; i < players.size(); i++){
+            String string = "Player" + (i-1);
+            Paper.book().write(string, players.get(i));
+        }
+        totalPlayerNum--;
+        Paper.book().write("totalPlayerNum", totalPlayerNum);
     }
 
     public static void loadData(){

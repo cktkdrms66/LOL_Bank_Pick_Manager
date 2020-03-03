@@ -2,6 +2,7 @@ package com.example.lol_ban_pick_manager;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -54,17 +55,17 @@ public class SelectTeamActivity extends Activity {
                     //todo
                 }else{
                     int teamIndex = pos;
-                    int teamLogo = ApplicationClass.teams.get(pos).logo;
+                    Bitmap teamLogo = ApplicationClass.teams.get(pos).logo;
                     String teamName = ApplicationClass.teams.get(pos).name;
                     PopupMakeMatchActivity popupMakeMatchActivityContext = (PopupMakeMatchActivity)PopupMakeMatchActivity.context;
                     if(isOurTeam){
                         popupMakeMatchActivityContext.imageView_team0_logo
-                                .setImageResource(teamLogo);
+                                .setImageBitmap(teamLogo);
                         popupMakeMatchActivityContext.textView_team0_name
                                 .setText(teamName);
                     }else{
                         popupMakeMatchActivityContext.imageView_team1_logo
-                                .setImageResource(teamLogo);
+                                .setImageBitmap(teamLogo);
                         popupMakeMatchActivityContext.textView_team1_name
                                 .setText(teamName);
                     }

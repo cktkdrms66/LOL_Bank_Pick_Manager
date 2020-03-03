@@ -8,24 +8,28 @@
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp">
+        android:layout_margin="20dp"
+        android:background="#FFFFFF">
 
         <LinearLayout
             android:id="@+id/cardView_linearlayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="#FFFFFF"
             android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/cardView_champion_image"
                 android:layout_width="55dp"
                 android:layout_height="55dp"
-                app:srcCompat="@drawable/ahri" />
+                android:background="#FFFFFF"
+                android:src="@drawable/ahri" />
 
             <TextView
                 android:id="@+id/cardView_champion_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#FFFFFF"
                 android:gravity="center"
                 android:lines="2"
                 android:text="누누와\n윌럼프"

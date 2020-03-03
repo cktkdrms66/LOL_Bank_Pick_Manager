@@ -1,22 +1,27 @@
 package com.example.lol_ban_pick_manager;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Team {
+public class Team implements Serializable {
 
     String name;
-    int logo;
+    Bitmap logo;
     int type;
+    boolean isUsing = false;
+    ArrayList<Champion> most = new ArrayList<>();
     Player[] players = new Player[5];
 
 
-    public static class Player{
+    public static class Player implements Serializable{
         int type;
         String name;
         String tear;
         int champNum;
+        boolean isUsing = false;
         ArrayList<Champion> most = new ArrayList<>();//최대 10개까지
 
         public Player(int i){
@@ -27,9 +32,10 @@ public class Team {
             }
             else if(i == 1){
                 type = 1;
-                name = "이름없는 소환사";
+                name = "이름없음";
                 tear = "UN";
             }
+
         }
 
         public static Player makePlus(){
@@ -54,23 +60,24 @@ public class Team {
     Team(int i){
         if(i == 0){
             name = " ";
-            logo = R.drawable.nothing;
+            logo = ((MainActivity)MainActivity.context).setBitmap(R.drawable.no);
             type = i;
         }
         else if(i == 1){
             name = "기본팀";
-            logo = R.drawable.nothing;
+            logo = ((MainActivity)MainActivity.context).setBitmap(R.drawable.no);
             type = i;
         }
         for(int j = 0; j < 5; j++){
             players[j] = new Player(i);
         }
     }
-    Team(String name, int logo, Player[] players){
+    Team(String name, Bitmap logo, Player[] players, ArrayList<Champion> most){
         this.type = 2;
         this.name = name;
         this.logo = logo;
         this.players = players;
+        this.most = most;
     }
 
     public static ArrayList<Champion> makeMost(String... championNames){
@@ -112,15 +119,65 @@ public class Team {
         return team;
     }
 
-    public static Team makeTeam(String name, int logo, Player[] players){
-        Team team = new Team(name, logo, players);
+    public static Team makeTeam(String name, Bitmap logo, Player[] players, ArrayList<Champion> most){
+        Team team = new Team(name, logo, players, most);
         ApplicationClass.teams.add(team);
         ApplicationClass.saveTeam(team);
+        for(int i = 0; i < 5; i++){
+            players[i].isUsing = true;
+            ApplicationClass.saveRePlayer(players[i]);
+        }
         return team;
     }
 
 
 
+    public static String getTearFromInt(int tear){
+        if (tear== 9) {
+            return "C";
+        } else if (tear== 8) {
+            return "GM";
+        } else if (tear == 7) {
+            return "M";
+        } else if (tear == 6) {
+            return "D";
+        } else if (tear == 5) {
+            return "P";
+        } else if (tear == 4) {
+            return "G";
+        } else if (tear == 3) {
+            return "S";
+        } else if (tear == 2) {
+            return "B";
+        } else if (tear == 1) {
+            return "I";
+        } else{
+            return "UN";
+        }
+    }
+    public static int tear_color(int tear){
+        if (tear== 9) {
+            return 0xFFFBBD66;
+        } else if (tear== 8) {
+            return 0xFFDF4D4D;
+        } else if (tear == 7) {
+            return 0xFF7E50A1;
+        } else if (tear == 6) {
+            return 0xFF03A9F4;
+        } else if (tear == 5) {
+            return 0xFF22D8A6;
+        } else if (tear == 4) {
+            return 0xFFFFB503;
+        } else if (tear == 3) {
+            return 0xFFABB5B8;
+        } else if (tear == 2) {
+            return 0xFF8E4B2D;
+        } else if (tear == 0 || tear == 1) {
+            return 0xFF5F5757;
+        } else{
+            return Color.TRANSPARENT;
+        }
+    }
     public static int tear_color(String tear) {
         if (tear.equals("C")) {
             return 0xFFFBBD66;

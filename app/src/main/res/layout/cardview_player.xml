@@ -9,7 +9,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp">
+        android:layout_margin="10dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cardView_linearlayout"
@@ -24,12 +24,13 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ahri" />
+                android:src="@drawable/ahri" />
 
             <TextView
                 android:id="@+id/cardView_player_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="10dp"
                 android:gravity="center"
                 android:lines="1"
                 android:text="페이커"
@@ -37,16 +38,29 @@
                 android:textSize="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/cardView_position"
-                app:layout_constraintTop_toTopOf="@+id/cardView_position" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView_player_image" />
 
             <ImageView
-                android:id="@+id/cardView_position"
+                android:id="@+id/cardView_player_tear_back"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardView_player_image"
-                app:srcCompat="@drawable/position_top" />
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/circle" />
+
+            <TextView
+                android:id="@+id/cardView_player_textView_tear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="D3"
+                android:textColor="#FFFFFF"
+                app:layout_constraintBottom_toBottomOf="@+id/cardView_player_tear_back"
+                app:layout_constraintEnd_toEndOf="@+id/cardView_player_tear_back"
+                app:layout_constraintStart_toStartOf="@+id/cardView_player_tear_back"
+                app:layout_constraintTop_toTopOf="@+id/cardView_player_tear_back" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

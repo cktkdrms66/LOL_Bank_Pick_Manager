@@ -131,7 +131,7 @@ public class GameAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
         new_holder.textView_name.setText(mItems.get(position).name);
 
-        new_holder.imageView.setImageResource(mItems.get(position).victoryTeamLogo);
+        new_holder.imageView.setImageBitmap(mItems.get(position).victoryTeamLogo);
 
         int size = mItems.get(position).star;
         for(int i = 0; i < size; i++){

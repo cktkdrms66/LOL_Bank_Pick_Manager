@@ -15,12 +15,19 @@ import java.util.ArrayList;
 public class MatchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
     private ArrayList<Match> mItems;
     private MatchAdapter.OnItemClickListener mListener = null;
+    private OnLongClickListener mLongListener = null;
     public interface OnItemClickListener{
         void onItemClick(View v, int pos);
+    }
+    public interface OnLongClickListener{
+        void onLongClick(View v, int pos);
     }
 
     public void setOnItemClickListener(MatchAdapter.OnItemClickListener listener){
         this.mListener = listener;
+    }
+    public void setOnLongClickListener(OnLongClickListener listener){
+        this.mLongListener = listener;
     }
 
 
@@ -58,6 +65,17 @@ public class MatchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     }
                 }
             });
+
+            view.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    int pos = getAdapterPosition();
+                    if(pos != RecyclerView.NO_POSITION){
+                        mLongListener.onLongClick(view, pos);
+                    }
+                    return true;
+                }
+            });
         }
     }
 
@@ -89,8 +107,8 @@ public class MatchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             new_holder.textView_back1.setVisibility(View.INVISIBLE);
 
         }else{
-            new_holder.imageView_team0_logo.setImageResource(mItems.get(position).team0.logo);
-            new_holder.imageView_team1_logo.setImageResource(mItems.get(position).team1.logo);
+            new_holder.imageView_team0_logo.setImageBitmap(mItems.get(position).team0.logo);
+            new_holder.imageView_team1_logo.setImageBitmap(mItems.get(position).team1.logo);
             new_holder.textView_team0_name.setText(mItems.get(position).team0.name);
             new_holder.textView_team1_name.setText(mItems.get(position).team1.name);
             if(mItems.get(position).isTeam0Blue == false){

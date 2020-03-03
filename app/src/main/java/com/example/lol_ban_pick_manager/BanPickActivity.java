@@ -129,6 +129,7 @@ public class BanPickActivity extends AppCompatActivity {
         if(gameIndex == 0){
             game = new Match.Game();
         }else{
+            System.out.println("gameIndex " + gameIndex);
             game = match.games.get(gameIndex);
             lastPickIndex = game.gameElements.size() - 1;
             System.out.println(lastPickIndex + " second lastPick");
@@ -400,16 +401,17 @@ public class BanPickActivity extends AppCompatActivity {
                 int star = data.getExtras().getInt("star");
                 String gameName = data.getExtras().getString("gameName");
                 int victoryType = data.getExtras().getInt("victoryType");
-                int image;
+                Bitmap image;
                 if(victoryType == 0){
                     image = match.team0.logo;
                 }else if(victoryType == 1){
                     image = match.team1.logo;
                 }else{
-                    image = R.drawable.nothing;
+                    Drawable drawable = getResources().getDrawable(R.drawable.no);
+                    image = ((BitmapDrawable)drawable).getBitmap();
                 }
                 Match.Game newGame = new Match.Game();
-                newGame.setGame(gameName, image, star);
+                newGame.setGame(gameName, image, star, game.gameElements);
                 ApplicationClass.addGame(match, newGame);
                 System.out.println(lastPickIndex + " lastPickIndex");
                 ApplicationClass.showToast(context, "저장이 완료되었습니다.");
@@ -467,8 +469,6 @@ public class BanPickActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), PopupSaveGameActivity.class);
         intent.putExtra("team0Name", team0.name);
         intent.putExtra("team1Name", team1.name);
-        intent.putExtra("team0Image", team0.logo);
-        intent.putExtra("team1Image", team1.logo);
         intent.putExtra("matchIndex", matchIndex);
         startActivityForResult(intent, 0);
 
@@ -509,6 +509,7 @@ public class BanPickActivity extends AppCompatActivity {
     }
     public void setImage(int pickIndex){
         Match.PickClass nowPick = (Match.PickClass) pickSerial.get(pickIndex);
+        System.out.println(nowPick.championIndex + " champIndex");
         int image = Champion.getChampionImage(nowPick.championIndex);
         if(nowPick.type == 0){
             if(nowPick.isOurTeam){
@@ -902,6 +903,7 @@ public class BanPickActivity extends AppCompatActivity {
         for(int i = 0; i < 5; i++){
             imageView_team0_picks[i].setImageBitmap(swapPhaseClass.bitmapsOld0[i]);
             imageView_team1_picks[i].setImageBitmap(swapPhaseClass.bitmapsOld1[i]);
+
         }
     }
 

@@ -18,12 +18,20 @@ public class TeamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private ArrayList<Team> mItems;
     private OnItemClickListener mListener = null;
+    private OnLongClickListener mLongListener = null;
+
     public interface OnItemClickListener{
         void onItemClick(View v, int pos);
     }
 
+    public interface OnLongClickListener {
+        void onLongClick(View v, int pos);
+    }
     public void setOnItemClickListener(OnItemClickListener listener){
         this.mListener = listener;
+    }
+    public void setOnLongClickListener(OnLongClickListener listener){
+        this.mLongListener = listener;
     }
 
 
@@ -64,6 +72,19 @@ public class TeamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     }
                 }
             });
+
+            view.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    int pos = getAdapterPosition();
+                    if(pos != RecyclerView.NO_POSITION){
+                        if(mLongListener != null){
+                            mLongListener.onLongClick(view, pos);
+                        }
+                    }
+                    return true;
+                }
+            });
         }
     }
 
@@ -90,7 +111,7 @@ public class TeamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 new_holder.textView_backgroud.setBackgroundResource(R.drawable.team_logo_backgroud);
                 new_holder.imageView_plus.setImageResource(R.drawable.nothing);
             }
-            new_holder.imageView_logo.setImageResource(mItems.get(position).logo);
+            new_holder.imageView_logo.setImageBitmap(mItems.get(position).logo);
             for(int i = 0; i < 5; i++){
                 String tear = mItems.get(position).players[i].tear;
                 new_holder.textView_player[i].setText(tear);

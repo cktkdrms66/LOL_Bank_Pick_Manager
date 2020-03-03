@@ -17,6 +17,8 @@ public class FragmentMatchActivity extends Fragment {
     private RecyclerView recyclerView;
     private ImageView imageView_search;
 
+    static int posIndex;
+    MatchAdapter adapter;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +43,7 @@ public class FragmentMatchActivity extends Fragment {
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        MatchAdapter adapter = new MatchAdapter(ApplicationClass.matches);
+        adapter = new MatchAdapter(ApplicationClass.matches);
         recyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListener(new MatchAdapter.OnItemClickListener() {
@@ -55,6 +57,22 @@ public class FragmentMatchActivity extends Fragment {
                     intent.putExtra("matchIndex", pos);
                 }
                 startActivity(intent);
+            }
+        });
+
+        adapter.setOnLongClickListener(new MatchAdapter.OnLongClickListener() {
+            @Override
+            public void onLongClick(View v, int pos) {
+                posIndex = pos;
+                CustomDialog customDialog = new CustomDialog(MainActivity.context);
+                customDialog.callFunction("삭제하시겠습니까?");
+                customDialog.setOnOkClickListener(new CustomDialog.OnOkClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ApplicationClass.removeMatch(posIndex);
+                        adapter.notifyItemRemoved(posIndex);
+                    }
+                });
             }
         });
 

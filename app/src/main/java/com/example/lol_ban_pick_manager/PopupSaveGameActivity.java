@@ -2,6 +2,8 @@ package com.example.lol_ban_pick_manager;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.View;
@@ -22,8 +24,9 @@ public class PopupSaveGameActivity extends Activity {
     EditText editText;
 
     int star = 1;
+    Match match;
     String gameName;
-    int team0Image, team1Image;
+    Bitmap team0Image, team1Image;
     String team0Name, team1Name;
     int matchIndex;
     int victoryType = 2;
@@ -34,11 +37,12 @@ public class PopupSaveGameActivity extends Activity {
         setContentView(R.layout.activity_popup_save_game);
 
         final Intent intent = getIntent();
+        matchIndex = intent.getExtras().getInt("matchIndex");
+        match = ApplicationClass.matches.get(matchIndex);
         team0Name = intent.getExtras().getString("team0Name");
         team1Name = intent.getExtras().getString("team1Name");
-        team0Image = intent.getExtras().getInt("team0Image");
-        team1Image = intent.getExtras().getInt("team1Image");
-        matchIndex = intent.getExtras().getInt("matchIndex");
+        team0Image = match.team0.logo;
+        team1Image = match.team1.logo;
 
         editText = findViewById(R.id.save_game_editText_input);
         textView_team_name = findViewById(R.id.save_game_team_name);
@@ -52,7 +56,7 @@ public class PopupSaveGameActivity extends Activity {
         imageViews[4] = findViewById(R.id.save_game_star4);
 
         editText.setText("밴픽 1");
-        imageView_team_logo.setImageResource(R.drawable.nothing);
+        imageView_team_logo.setImageResource(R.drawable.no);
         imageViews[0].setImageResource(R.drawable.starlight);
 
         for(int i = 0; i < 5; i++){
@@ -87,13 +91,13 @@ public class PopupSaveGameActivity extends Activity {
                     @Override
                     public void onClick(View v) {
                         if(CustomDialog.victoryType == 0){
-                            imageView_team_logo.setImageResource(team0Image);
+                            imageView_team_logo.setImageBitmap(team0Image);
                             textView_team_name.setText(team0Name);
                         }else if(CustomDialog.victoryType == 1){
-                            imageView_team_logo.setImageResource(team1Image);
+                            imageView_team_logo.setImageBitmap(team1Image);
                             textView_team_name.setText(team1Name);
                         }else{
-                            imageView_team_logo.setImageResource(R.drawable.nothing);
+                            imageView_team_logo.setImageResource(R.drawable.no);
                             textView_team_name.setText("설정 안함");
                         }
                         victoryType = CustomDialog.victoryType;

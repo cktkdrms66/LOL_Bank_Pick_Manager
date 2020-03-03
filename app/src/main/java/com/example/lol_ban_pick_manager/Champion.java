@@ -79,12 +79,6 @@ public class Champion implements Serializable {
 
     public static void championSetting(){
         ArrayList<Champion> champions = ApplicationClass.champions;
-        champions.add(new Champion(0));
-        champions.add(new Champion(1));
-        champions.add(new Champion(2));
-        champions.add(new Champion(3));
-        champions.add(new Champion(4));
-        champions.add(new Champion(5));
         champions.add(new Champion("가렌", R.drawable.garen));
         champions.add(new Champion("갈리오", R.drawable.galio));
         champions.add(new Champion("갱플랭크", R.drawable.gangplank));

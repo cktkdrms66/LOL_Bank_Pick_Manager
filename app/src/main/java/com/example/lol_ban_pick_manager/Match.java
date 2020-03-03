@@ -1,12 +1,10 @@
 package com.example.lol_ban_pick_manager;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class Match {
+public class Match  {
 
     String name;
     int type;// 0 == 플러스, 1 == 디폴트(삭제 불가) 2 == 그냥 기본팀
@@ -44,6 +42,10 @@ public class Match {
         Match match = new Match(name, team0, team1, isTeam0Blue, gameNum, games);
         ApplicationClass.matches.add(match);
         ApplicationClass.saveMatch(match);
+        team0.isUsing = true;
+        team1.isUsing = true;
+        ApplicationClass.saveReTeam(team0);
+        ApplicationClass.saveReTeam(team1);
         return match;
     }
     public static Match makeDefaultMatch(){
@@ -63,9 +65,10 @@ public class Match {
     }
 
 
+
     public static class Game{
         String name;
-        int victoryTeamLogo;
+        Bitmap victoryTeamLogo;
         int type;// 0 == 플러스,  1 == 그냥 게임
         int star = 0;
         ArrayList<GameElement> gameElements = new ArrayList<>();
@@ -74,17 +77,18 @@ public class Match {
             //plus
             type = 0;
             name = "";
-            victoryTeamLogo = R.drawable.nothing;
+            victoryTeamLogo =((MainActivity)MainActivity.context).setBitmap(R.drawable.no);
 
         }
-        public void setGame(String name, int victoryTeamLogo, int star){
+        public void setGame(String name, Bitmap victoryTeamLogo, int star, ArrayList<GameElement> elements){
             type = 1;
             this.name = name;
             this.victoryTeamLogo = victoryTeamLogo;
             this.star = star;
+            for(int i = 0 ; i < elements.size(); i++){
+                this.gameElements.add(elements.get(i));
+            }
         }
-
-
 
         public void makePickClassEqaulPhase(){
             PickClass gameElement0 = (PickClass)gameElements.get(gameElements.size()-2);

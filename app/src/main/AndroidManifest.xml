@@ -11,10 +11,16 @@
         android:theme="@style/AppTheme"
         android:name=".ApplicationClass">
         <activity android:name=".BanPickActivity"/>
+        <activity android:name=".PopupMakePlayerActivity" android:theme="@android:style/Theme.Dialog"/>
         <activity android:name=".PopupSaveGameActivity" android:theme="@android:style/Theme.Dialog"/>
         <activity android:name=".PopupGameActivity" android:theme="@android:style/Theme.Dialog"/>
         <activity android:name=".PopupMakeMatchActivity" android:theme="@android:style/Theme.Dialog"/>
+        <activity android:name=".PopupMakeTeamActivity" android:theme="@android:style/Theme.Dialog"/>
+        <activity android:name=".SelectChampionActivity"/>
         <activity android:name=".SelectTeamActivity"/>
+        <activity android:name=".TeamDetailActivity"/>
+        <activity android:name=".PlayerDetailActivity"/>
+        <activity android:name=".SelectPlayerActivity"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

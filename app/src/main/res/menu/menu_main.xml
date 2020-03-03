@@ -13,8 +13,4 @@
         android:id="@+id/item_player"
         android:icon="@drawable/ic_person_black_24dp"
         android:title="플레이어" />
-    <item
-        android:id="@+id/item_setting"
-        android:icon="@drawable/ic_setting"
-        android:title="설정" />
 </menu>
