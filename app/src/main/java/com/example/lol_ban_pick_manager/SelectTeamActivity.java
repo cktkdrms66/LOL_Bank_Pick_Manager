@@ -12,12 +12,15 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 public class SelectTeamActivity extends Activity {
 
     private TextView textView;
     private RecyclerView recyclerView;
     private ImageView imageView_search;
 
+    ArrayList<Team> arrayList;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,35 +47,35 @@ public class SelectTeamActivity extends Activity {
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        TeamAdapter adapter = new TeamAdapter(ApplicationClass.teams);
+        arrayList = new ArrayList<>();
+        for(int i = 1; i < ApplicationClass.teams.size(); i++){
+            arrayList.add(ApplicationClass.teams.get(i));
+        }
+        TeamAdapter adapter = new TeamAdapter(arrayList);
         recyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListener(new TeamAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int pos) {
-                Intent intent = getIntent();
-                if(ApplicationClass.teams.get(pos).type == 0){
-                    //todo
+                int teamIndex = pos+1;
+                Bitmap teamLogo = arrayList.get(pos).logo;
+                String teamName = arrayList.get(pos).name;
+                PopupMakeMatchActivity popupMakeMatchActivityContext = (PopupMakeMatchActivity)PopupMakeMatchActivity.context;
+                if(isOurTeam){
+                    popupMakeMatchActivityContext.imageView_team0_logo
+                            .setImageBitmap(teamLogo);
+                    popupMakeMatchActivityContext.textView_team0_name
+                            .setText(teamName);
                 }else{
-                    int teamIndex = pos;
-                    Bitmap teamLogo = ApplicationClass.teams.get(pos).logo;
-                    String teamName = ApplicationClass.teams.get(pos).name;
-                    PopupMakeMatchActivity popupMakeMatchActivityContext = (PopupMakeMatchActivity)PopupMakeMatchActivity.context;
-                    if(isOurTeam){
-                        popupMakeMatchActivityContext.imageView_team0_logo
-                                .setImageBitmap(teamLogo);
-                        popupMakeMatchActivityContext.textView_team0_name
-                                .setText(teamName);
-                    }else{
-                        popupMakeMatchActivityContext.imageView_team1_logo
-                                .setImageBitmap(teamLogo);
-                        popupMakeMatchActivityContext.textView_team1_name
-                                .setText(teamName);
-                    }
-                    intent.putExtra("teamIndex", teamIndex);
-                    setResult(RESULT_OK, intent);
-                    finish();
+                    popupMakeMatchActivityContext.imageView_team1_logo
+                            .setImageBitmap(teamLogo);
+                    popupMakeMatchActivityContext.textView_team1_name
+                            .setText(teamName);
                 }
+                Intent intent = getIntent();
+                intent.putExtra("teamIndex", teamIndex);
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
 

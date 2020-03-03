@@ -13,11 +13,16 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 public class SelectPlayerActivity extends Activity {
 
     private TextView textView;
     private RecyclerView recyclerView;
     private ImageView imageView_search;
+
+    ArrayList<Team.Player> arrayList;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,21 +43,21 @@ public class SelectPlayerActivity extends Activity {
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(this,3));
-        PlayerAdapter adapter = new PlayerAdapter(ApplicationClass.players);
+        arrayList = new ArrayList<>();
+        for(int i = 1; i < ApplicationClass.players.size(); i++){
+            arrayList.add(ApplicationClass.players.get(i));
+        }
+        PlayerAdapter adapter = new PlayerAdapter(arrayList);
         recyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListener(new PlayerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int pos) {
                 Intent intent = getIntent();
-                if(ApplicationClass.players.get(pos).type == 0){
-                    //todo
-                }else{
-                    int playerIndex = pos;
-                    intent.putExtra("playerIndex", playerIndex);
-                    setResult(RESULT_OK, intent);
-                    finish();
-                }
+                int playerIndex = pos+1;
+                intent.putExtra("playerIndex", playerIndex);
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
 

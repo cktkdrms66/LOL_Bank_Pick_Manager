@@ -11,7 +11,7 @@ public class Team implements Serializable {
     String name;
     Bitmap logo;
     int type;
-    boolean isUsing = false;
+    int using = 0;
     ArrayList<Champion> most = new ArrayList<>();
     Player[] players = new Player[5];
 
@@ -21,7 +21,7 @@ public class Team implements Serializable {
         String name;
         String tear;
         int champNum;
-        boolean isUsing = false;
+        int using = 0;
         ArrayList<Champion> most = new ArrayList<>();//최대 10개까지
 
         public Player(int i){
@@ -124,7 +124,10 @@ public class Team implements Serializable {
         ApplicationClass.teams.add(team);
         ApplicationClass.saveTeam(team);
         for(int i = 0; i < 5; i++){
-            players[i].isUsing = true;
+            if(players[i].type == 1){
+                continue;
+            }
+            players[i].using++;
             ApplicationClass.saveRePlayer(players[i]);
         }
         return team;

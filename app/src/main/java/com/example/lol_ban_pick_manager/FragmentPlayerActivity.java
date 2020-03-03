@@ -64,6 +64,7 @@ public class FragmentPlayerActivity extends Fragment {
                     }
                     int playerIndex = pos;
                     Intent intent = new Intent(MainActivity.context, PlayerDetailActivity.class);
+                    intent.putExtra("where", 0);
                     intent.putExtra("playerIndex", playerIndex);
                     startActivityForResult(intent,0);
                 }
@@ -85,7 +86,7 @@ public class FragmentPlayerActivity extends Fragment {
                     customDialog.setOnOkClickListener(new CustomDialog.OnOkClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if(ApplicationClass.players.get(posIndex).isUsing){
+                            if(ApplicationClass.players.get(posIndex).using > 0){
                                 ApplicationClass.showToast(MainActivity.context,
                                         "이 플레이어로 이루어진 팀이 있어 삭제할 수 없습니다.");
                                 return;

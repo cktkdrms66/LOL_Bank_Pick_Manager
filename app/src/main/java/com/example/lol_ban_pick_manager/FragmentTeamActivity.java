@@ -80,7 +80,7 @@ public class FragmentTeamActivity extends Fragment {
                     customDialog.setOnOkClickListener(new CustomDialog.OnOkClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if(ApplicationClass.teams.get(posIndex).isUsing){
+                            if(ApplicationClass.teams.get(posIndex).using > 0){
                                 ApplicationClass.showToast(MainActivity.context,
                                         "이 팀을 포함한 매치가 있어 삭제할 수 없습니다.");
                                 return;

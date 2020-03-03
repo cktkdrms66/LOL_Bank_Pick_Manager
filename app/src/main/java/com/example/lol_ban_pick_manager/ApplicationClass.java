@@ -72,6 +72,7 @@ public class ApplicationClass extends Application {
     public static void saveMatch(Match match){
         int index = ApplicationClass.totalMatchNum++;
         String string = "Match" + index;
+        System.out.println("save " + string);
         Paper.book().write(string, match);
         Paper.book().write("totalMatchNum", index);
     }
@@ -79,15 +80,25 @@ public class ApplicationClass extends Application {
         for(int i = 1; i < matches.size(); i++){
             if(matches.get(i) == match){
                 String string = "Match" + (i-1);
+                System.out.println("resave " + string);
                 Paper.book().write(string, match);
                 break;
             }
         }
     }
     public static void removeMatch(int matchIndex){
+        matches.get(matchIndex).team0.using--;
+        saveReTeam(matches.get(matchIndex).team0);
+        if(matches.get(matchIndex).team0 != matches.get(matchIndex).team1){
+            matches.get(matchIndex).team1.using--;
+            saveReTeam(matches.get(matchIndex).team1);
+        }
         matches.remove(matchIndex);
+        System.out.println("remove Match" + (matchIndex-1));
+        Paper.book().delete("Match" + (matchIndex-1));
         for(int i = 1; i < matches.size(); i++){
             String string = "Match" + (i-1);
+            System.out.println("save " + string);
             Paper.book().write(string, matches.get(i));
         }
         totalMatchNum--;
@@ -96,6 +107,7 @@ public class ApplicationClass extends Application {
     }
     public static void saveTeam(Team team){
         int index = ApplicationClass.totalTeamNum++;
+        System.out.println("save Team" + index);
         Paper.book().write("Team" + index, team);
         Paper.book().write("totalTeamNum", index);
     }
@@ -103,15 +115,40 @@ public class ApplicationClass extends Application {
         for(int i = 1; i < teams.size(); i++){
             if(teams.get(i) == team){
                 String string = "Team" + (i-1);
+                System.out.println("resave " + string);
                 Paper.book().write(string, team);
                 break;
             }
         }
     }
     public static void removeTeam(int teamIndex){
+        System.out.println("removeTeam");
+        ArrayList<Team.Player> dummyPlayers = new ArrayList<>();
+        for(int i = 0; i < 5; i++){
+            if(teams.get(teamIndex).players[i].type == 1){
+                continue;
+            }
+            boolean isSame = false;
+            for(int j = 0; j < dummyPlayers.size(); j++){
+                if(dummyPlayers.get(j) == teams.get(teamIndex).players[j]){
+                    isSame =true;
+                    break;
+                }
+            }
+            if(isSame){
+                continue;
+            }
+            teams.get(teamIndex).players[i].using--;
+            System.out.println("resave Player " + teams.get(teamIndex).players[i].name);
+            dummyPlayers.add(teams.get(teamIndex).players[i]);
+            saveRePlayer(teams.get(teamIndex).players[i]);
+        }
         teams.remove(teamIndex);
+        Paper.book().delete("Team" + (teamIndex-1));
+        System.out.println("remove Team" + (teamIndex-1));
         for(int i = 1; i < teams.size(); i++){
             String string = "Team" + (i-1);
+            System.out.println("resave " + string);
             Paper.book().write(string, teams.get(i));
         }
         totalTeamNum--;
@@ -120,6 +157,7 @@ public class ApplicationClass extends Application {
     
     public static void savePlayer(Team.Player player){
         int index = ApplicationClass.totalPlayerNum++;
+        System.out.println("save Player" + index);
         Paper.book().write("Player" + index, player);
         Paper.book().write("totalTeamNum", index);
     }
@@ -127,15 +165,20 @@ public class ApplicationClass extends Application {
         for(int i = 1; i < players.size(); i++){
             if(players.get(i) == player){
                 String string = "Player" + (i-1);
+                System.out.println("write " + string);
                 Paper.book().write(string, player);
                 break;
             }
         }
     }
     public static void removePlayer(int PlayerIndex){
+        System.out.println("removePlayer");
         players.remove(PlayerIndex);
+        Paper.book().delete("Player" + (PlayerIndex-1));
+        System.out.println("remove Player"+(PlayerIndex-1));
         for(int i = 1; i < players.size(); i++){
             String string = "Player" + (i-1);
+            System.out.println("write " + string);
             Paper.book().write(string, players.get(i));
         }
         totalPlayerNum--;
@@ -143,6 +186,7 @@ public class ApplicationClass extends Application {
     }
 
     public static void loadData(){
+
         String first = Paper.book().read("first");
         if(first == null){
             System.out.println("first");

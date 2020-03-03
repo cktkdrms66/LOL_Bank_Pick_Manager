@@ -1,6 +1,7 @@
 package com.example.lol_ban_pick_manager;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TeamDetailActivity extends Activity {
 
@@ -30,6 +32,7 @@ public class TeamDetailActivity extends Activity {
     int teamIndex;
 
     static boolean change;
+    static int selectIndex;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -101,18 +104,40 @@ public class TeamDetailActivity extends Activity {
                         }
                         i++;
                     }
-                    if(team.players[i].type == 1){
-                        return;
-                    }
-                    Intent intent1 = new Intent(getApplicationContext(), PlayerDetailActivity.class);
-                    intent1.putExtra("teamIndex", teamIndex);
-                    intent1.putExtra("playerIndex", i);
-                    startActivityForResult(intent1, 0);
+
+                    selectIndex = i;
+                    show();
+
                 }
             });
         }
     }
 
+    void show(){
+        final List<String> list = new ArrayList<>();
+        list.add("변경");
+        if(team.players[selectIndex].type != 1){
+            list.add("자세히 보기");
+        }
+        final CharSequence[] items =  list.toArray(new String[list.size()]);
+        new AlertDialog.Builder(this)
+                .setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if(i == 0){
+                            Intent intent1 = new Intent(getApplicationContext(), SelectPlayerActivity.class);
+                            startActivityForResult(intent1, 1);
+                        }else{
+                            Intent intent1 = new Intent(getApplicationContext(), PlayerDetailActivity.class);
+                            intent1.putExtra("teamIndex", teamIndex);
+                            intent1.putExtra("playerIndex", selectIndex);
+                            intent1.putExtra("where", 1);
+                            startActivityForResult(intent1, 0);
+                        }
+                    }
+                })
+                .show();
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == 0){
@@ -133,6 +158,31 @@ public class TeamDetailActivity extends Activity {
                     }
                 change = true;
                 }
+            }
+        }else if(requestCode == 1){
+            if(resultCode == RESULT_OK){
+                int playerIndex = data.getExtras().getInt("playerIndex");
+                if(playerIndex == -1){
+                    return;
+                }
+                if(team.players[selectIndex] == ApplicationClass.players.get(playerIndex)){
+                    return;
+                }
+                team.players[selectIndex].using--;
+                imageViews_tear[selectIndex].setColorFilter(Team.tear_color(ApplicationClass.players.get(playerIndex).tear),
+                        PorterDuff.Mode.SRC_IN);
+                textViews_tear[selectIndex].setText(ApplicationClass.players.get(playerIndex).tear);
+                if(ApplicationClass.players.get(playerIndex).most.size() == 0){
+                    imageViews[selectIndex].setImageResource(R.drawable.randomchampion);
+                }else{
+                    imageViews[selectIndex].setImageResource(ApplicationClass.players.get(playerIndex).most.get(0).image);
+                }
+                textViews[selectIndex].setText(ApplicationClass.players.get(playerIndex).name);
+                team.players[selectIndex] = ApplicationClass.players.get(playerIndex);
+                team.players[selectIndex].using++;
+                ApplicationClass.saveRePlayer(team.players[selectIndex]);
+                change = true;
+
             }
         }
     }

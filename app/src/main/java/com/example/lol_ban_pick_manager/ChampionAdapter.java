@@ -18,12 +18,12 @@ import java.util.ArrayList;
 
 public class ChampionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private ArrayList<Champion> mItems;
-    private ArrayList<Boolean> mIsClicked = new ArrayList<>();
-    private ArrayList<Boolean> mIsPicked = new ArrayList<>();
-    private int mOnlyItemPosition = -1;
+    ArrayList<Champion> mItems;
+    ArrayList<Boolean> mIsClicked = new ArrayList<>();
+    ArrayList<Boolean> mIsPicked = new ArrayList<>();
+    int mOnlyItemPosition = -1;
     OnItemClickListener mListener = null;
-
+    OnLongClickListener mLongListener = null;
     public int getmOnlyItemPosition() {
         return mOnlyItemPosition;
     }
@@ -40,11 +40,16 @@ public class ChampionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public interface OnItemClickListener{
         void onItemClick(int pos, ImageView imageView);
     }
+    public interface OnLongClickListener{
+        void onLongClick(View view, int pos);
+    }
 
     public void setOnItemClickListener(OnItemClickListener listener){
         this.mListener = listener;
     }
-
+    public void setOnLongClickListener(OnLongClickListener listener){
+        this.mLongListener = listener;
+    }
     public void setClickClear(boolean isReturn, boolean isNext){
         if(isReturn ==false){
             mIsClicked.set(mOnlyItemPosition, false);
@@ -113,6 +118,24 @@ public class ChampionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     }
                 }
             });
+
+            view.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    int pos = getAdapterPosition();
+                    if(pos != RecyclerView.NO_POSITION){
+                        if(mLongListener != null){
+                            if(pos < mIsPicked.size()){
+                                if(mIsPicked.get(pos)){
+                                    return true;
+                                }
+                            }
+                            mLongListener.onLongClick(view, pos);
+                        }
+                    }
+                    return true;
+                }
+            });
         }
     }
 
@@ -136,7 +159,7 @@ public class ChampionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ChampionViewHolder new_holder = (ChampionViewHolder) holder;
         new_holder.textView.setText(mItems.get(position).name);
         new_holder.imageView.setImageResource(mItems.get(position).image);
-        if(position < mIsPicked.size()){
+        if(position < mIsClicked.size()){
             if(mIsPicked.get(position)){
                 new_holder.imageView.setColorFilter(Color.parseColor("#D81B60"), PorterDuff.Mode.DST);
                 new_holder.imageView.setColorFilter(Color.parseColor("#696969"), PorterDuff.Mode.MULTIPLY);

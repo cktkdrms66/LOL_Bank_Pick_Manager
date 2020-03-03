@@ -56,8 +56,13 @@ public class PlayerDetailActivity extends Activity {
         textViews[2] = findViewById(R.id.cardView_champion_name2);
 
         final Intent intent = getIntent();
-        team = ApplicationClass.teams.get(intent.getExtras().getInt("teamIndex"));
-        player = team.players[intent.getExtras().getInt("playerIndex")];
+        final int playerIndex = intent.getExtras().getInt("playerIndex");
+        if(intent.getExtras().getInt("where") == 0){
+            player = ApplicationClass.players.get(playerIndex);
+        }else{
+            team = ApplicationClass.teams.get(intent.getExtras().getInt("teamIndex"));
+            player = team.players[playerIndex];
+        }
         imageView_tear.setColorFilter(Team.tear_color(player.tear), PorterDuff.Mode.SRC_IN);
         textView_tear.setText(player.tear);
         textView_name.setText(player.name);
@@ -94,100 +99,84 @@ public class PlayerDetailActivity extends Activity {
             @Override
             public void onItemClick(int pos, ImageView imageView) {
                 if(arrayList.get(pos).isChampion ==false){
-                    //todo plus
-                    System.out.println("plus");
                     Intent intent1 = new Intent(getApplicationContext(), SelectChampionActivity.class);
                     intent1.putExtra("playerIndex",intent.getExtras().getInt("playerIndex"));
                     startActivityForResult(intent1, 0);
                 } else{
-                    if(selectSwitch == 0){
-                        selectIndex = pos;
-                        CustomDialog customDialog = new CustomDialog(PlayerDetailActivity.this);
-                        customDialog.callFunction("삭제하시겠습니까?");
-                        customDialog.setOnOkClickListener(new CustomDialog.OnOkClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                arrayList.remove(selectIndex);
-                                player.most.remove(selectIndex);
-                                if (selectIndex < 3) {// 0 1 2
-                                    int size = player.most.size() > 3 ? 3 : player.most.size();
-                                    for(int i = 0; i < size; i++){
-                                        imageViews[i].setImageResource(player.most.get(i).image);
-                                        textViews[i].setText(player.most.get(i).name);
-                                    }
-                                    for(int i = player.most.size(); i < 3; i++){
-                                        imageViews[i].setImageResource(R.drawable.randomchampion);
-                                        textViews[i].setText("");
-                                    }
-                                }
-                                adapter.notifyItemRemoved(selectIndex);
-                                isChange = true;
-                                ApplicationClass.saveRePlayer(player);
+                    if(adapter.getIsClicked(pos) == false){
+                        if(adapter.getmOnlyItemPosition() == -1){
+                            adapter.setIsClicked(pos, true);
+                            adapter.mOnlyItemPosition = pos;
+                            adapter.notifyDataSetChanged();
+                        }else{
+                            Champion champion = Champion.getChampion(player.most.get(pos).name);
+                            player.most.set(pos, Champion.getChampion(player.most.get(adapter.getmOnlyItemPosition()).name));
+                            arrayList.set(pos, Champion.getChampion(player.most.get(adapter.getmOnlyItemPosition()).name));
+                            player.most.set(adapter.getmOnlyItemPosition(), champion);
+                            arrayList.set(adapter.getmOnlyItemPosition(), Champion.getChampion(champion.name));
+                            int size = player.most.size() > 3 ? 3 : player.most.size();
+                            for(int i = 0; i < size; i++){
+                                imageViews[i].setImageResource(player.most.get(i).image);
+                                textViews[i].setText(player.most.get(i).name);
                             }
-                        });
-                    }else if(selectSwitch == 1){
-                        selectSwitch = 0;
-                        recyclerView.setBackgroundColor(Color.WHITE);
-                        if(player.most.get(changeIndex).name.equals(arrayList.get(pos).name)){
-                            return;
-                        }
-                        Champion champion = player.most.get(changeIndex);
-                        player.most.set(changeIndex, Champion.getChampion(arrayList.get(pos).name));
-                        arrayList.set(changeIndex, Champion.getChampion(arrayList.get(pos).name));
-                        imageViews[changeIndex].setImageResource(player.most.get(changeIndex).image);
-                        textViews[changeIndex].setText(player.most.get(changeIndex).name);
-                        for(int i = 0; i < player.most.size(); i++){
-                            if(changeIndex == i){
-                                continue;
+                            for(int i = size; i < 3; i++){
+                                imageViews[i].setImageResource(R.drawable.randomchampion);
+                                textViews[i].setText("");
                             }
-                            if(player.most.get(changeIndex).name.equals(player.most.get(i).name)){
-                                player.most.set(i, champion);
-                                arrayList.set(i, champion);
-                                if(i< 3){
-                                    imageViews[i].setImageResource(champion.image);
-                                    textViews[i].setText(champion.name);
-                                }
-                                break;
-                            }
-                        }
-                        adapter.notifyDataSetChanged();
-                        isChange = true;
-                        ApplicationClass.saveRePlayer(player);
+                            isChange = true;
+                            ApplicationClass.saveRePlayer(player);
 
+                            adapter.setIsClicked(adapter.mOnlyItemPosition, false);
+                            adapter.mOnlyItemPosition = -1;
+                            adapter.notifyDataSetChanged();
+
+                        }
+                    }else{
+                        adapter.setIsClicked(pos, false);
+                        adapter.mOnlyItemPosition = -1;
+                        adapter.notifyDataSetChanged();
                     }
 
                 }
             }
         });
 
-
-        for(int i = 0; i < 3; i++){
-            imageViews[i].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(selectSwitch ==0){
-                        ApplicationClass.showToast(getApplicationContext(), "챔피언을 선택해주세요.");
-                        int i = 0;
-                        ImageView nowView = (ImageView)view;
-                        for(ImageView imageView : imageViews){
-                            if(nowView == imageView){
-                                break;
-                            }
-                            i++;
-                        }
-                        changeIndex = i;
-                        selectSwitch = 1;
-                        recyclerView.setBackgroundColor(Color.GRAY);
-                    }else if(selectSwitch == 1){
-                        selectSwitch = 0;
-                        recyclerView.setBackgroundColor(Color.WHITE);
-                    }
-
+        adapter.setOnLongClickListener(new ChampionAdapter.OnLongClickListener() {
+            @Override
+            public void onLongClick(View view, int pos) {
+                if(arrayList.get(pos).isChampion ==false){
+                    return;
                 }
-            });
-        }
+                selectIndex = pos;
+                CustomDialog customDialog = new CustomDialog(PlayerDetailActivity.this);
+                customDialog.callFunction("삭제하시겠습니까?");
+                customDialog.setOnOkClickListener(new CustomDialog.OnOkClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        arrayList.remove(selectIndex);
+                        adapter.mIsClicked.remove(selectIndex);
+                        adapter.mIsPicked.remove(selectIndex);
+                        player.most.remove(selectIndex);
+                        if (selectIndex < 3) {// 0 1 2
+                            int size = player.most.size() > 3 ? 3 : player.most.size();
+                            for(int i = 0; i < size; i++){
+                                imageViews[i].setImageResource(player.most.get(i).image);
+                                textViews[i].setText(player.most.get(i).name);
+                            }
+                            for(int i = player.most.size(); i < 3; i++){
+                                imageViews[i].setImageResource(R.drawable.randomchampion);
+                                textViews[i].setText("");
+                            }
+                        }
+                        adapter.notifyItemRemoved(selectIndex);
+                        isChange = true;
+                        ApplicationClass.saveRePlayer(player);
+                    }
+                });
 
-        
+            }
+        });
+
     }
 
     @Override
@@ -210,6 +199,8 @@ public class PlayerDetailActivity extends Activity {
                 Champion champion = Champion.getChampion(championIndex);
                 arrayList.add(arrayList.size()-1,champion);
                 player.most.add(champion);
+                adapter.mIsClicked.add(false);
+                adapter.mIsPicked.add(false);
 
                 adapter.notifyItemInserted(arrayList.size()-2);
                 isChange = true;

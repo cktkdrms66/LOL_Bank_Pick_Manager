@@ -42,10 +42,15 @@ public class Match  {
         Match match = new Match(name, team0, team1, isTeam0Blue, gameNum, games);
         ApplicationClass.matches.add(match);
         ApplicationClass.saveMatch(match);
-        team0.isUsing = true;
-        team1.isUsing = true;
-        ApplicationClass.saveReTeam(team0);
-        ApplicationClass.saveReTeam(team1);
+        team0.using++;
+        team1.using++;
+        if(team0.type !=1){
+            ApplicationClass.saveReTeam(team0);
+        }
+        if(team1.type != 1){
+            ApplicationClass.saveReTeam(team1);
+
+        }
         return match;
     }
     public static Match makeDefaultMatch(){

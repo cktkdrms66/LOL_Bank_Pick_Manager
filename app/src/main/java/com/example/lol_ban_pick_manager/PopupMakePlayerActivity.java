@@ -81,17 +81,49 @@ public class PopupMakePlayerActivity extends Activity {
                     Intent intent1 = new Intent(getApplicationContext(), SelectChampionActivity.class);
                     intent1.putExtra("playerIndex", 1);
                     startActivityForResult(intent1, 0);
-                } else {
-                    CustomDialog customDialog = new CustomDialog(PopupMakePlayerActivity.this);
-                    customDialog.callFunction("삭제하시겠습니까?");
-                    customDialog.setOnOkClickListener(new CustomDialog.OnOkClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            champions.remove(selectIndex);
-                            adapter.notifyItemRemoved(selectIndex);
+                } else{
+                    if(adapter.getIsClicked(pos) == false){
+                        if(adapter.getmOnlyItemPosition() == -1){
+                            adapter.setIsClicked(pos, true);
+                            adapter.mOnlyItemPosition = pos;
+                            adapter.notifyDataSetChanged();
+                        }else{
+                            Champion champion = Champion.getChampion(champions.get(pos).name);
+                            champions.set(pos, Champion.getChampion(champions.get(adapter.getmOnlyItemPosition()).name));
+                            champions.set(adapter.getmOnlyItemPosition(), Champion.getChampion(champion.name));
+                            adapter.setIsClicked(adapter.mOnlyItemPosition, false);
+                            adapter.mOnlyItemPosition = -1;
+                            adapter.notifyDataSetChanged();
                         }
-                    });
+                    }else{
+                        adapter.setIsClicked(pos, false);
+                        adapter.mOnlyItemPosition = -1;
+                        adapter.notifyDataSetChanged();
+                    }
+
                 }
+
+            }
+        });
+
+        adapter.setOnLongClickListener(new ChampionAdapter.OnLongClickListener() {
+            @Override
+            public void onLongClick(View view, int pos) {
+                if(champions.get(pos).isChampion ==false){
+                    return;
+                }
+                selectIndex = pos;
+                CustomDialog customDialog = new CustomDialog(PopupMakePlayerActivity.this);
+                customDialog.callFunction("삭제하시겠습니까?");
+                customDialog.setOnOkClickListener(new CustomDialog.OnOkClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        champions.remove(selectIndex);
+                        adapter.mIsClicked.remove(selectIndex);
+                        adapter.mIsPicked.remove(selectIndex);
+                        adapter.notifyItemRemoved(selectIndex);
+                    }
+                });
             }
         });
 
@@ -131,6 +163,8 @@ public class PopupMakePlayerActivity extends Activity {
                     return;
                 }
                 champions.add(champions.size()-1, Champion.getChampion(championIndex));
+                adapter.mIsClicked.add(false);
+                adapter.mIsPicked.add(false);
                 adapter.notifyItemInserted(champions.size()-2);
 
             }

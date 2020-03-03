@@ -37,6 +37,10 @@ public class FragmentMatchActivity extends Fragment {
             @Override
             public void onClick(View view) {
                 //todo
+                System.out.println(ApplicationClass.totalPlayerNum + " totalPlayer");
+                System.out.println(ApplicationClass.totalTeamNum + " totalTeam") ;
+                System.out.println(ApplicationClass.totalMatchNum + " totalMatch");
+
             }
         });
 
