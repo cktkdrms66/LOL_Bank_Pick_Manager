@@ -107,8 +107,8 @@ public class MatchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             new_holder.textView_back1.setVisibility(View.INVISIBLE);
 
         }else{
-            new_holder.imageView_team0_logo.setImageBitmap(mItems.get(position).team0.logo);
-            new_holder.imageView_team1_logo.setImageBitmap(mItems.get(position).team1.logo);
+            new_holder.imageView_team0_logo.setImageBitmap(ApplicationClass.StringToBitmap(mItems.get(position).team0.logo));
+            new_holder.imageView_team1_logo.setImageBitmap(ApplicationClass.StringToBitmap(mItems.get(position).team1.logo));
             new_holder.textView_team0_name.setText(mItems.get(position).team0.name);
             new_holder.textView_team1_name.setText(mItems.get(position).team1.name);
             if(mItems.get(position).isTeam0Blue == false){

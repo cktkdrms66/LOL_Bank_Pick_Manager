@@ -68,7 +68,7 @@ public class TeamDetailActivity extends Activity {
         teamIndex = intent.getExtras().getInt("teamIndex");
         team = ApplicationClass.teams.get(teamIndex);
 
-        imageView_teamLogo.setImageBitmap(team.logo);
+        imageView_teamLogo.setImageBitmap(ApplicationClass.StringToBitmap(team.logo));
         textView_teamName.setText(team.name);
 
         for(int i = 0; i < 5; i++){
@@ -169,6 +169,8 @@ public class TeamDetailActivity extends Activity {
                     return;
                 }
                 team.players[selectIndex].using--;
+                ApplicationClass.saveRePlayer(team.players[selectIndex]);
+
                 imageViews_tear[selectIndex].setColorFilter(Team.tear_color(ApplicationClass.players.get(playerIndex).tear),
                         PorterDuff.Mode.SRC_IN);
                 textViews_tear[selectIndex].setText(ApplicationClass.players.get(playerIndex).tear);

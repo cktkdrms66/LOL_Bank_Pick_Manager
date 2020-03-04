@@ -58,7 +58,7 @@ public class SelectTeamActivity extends Activity {
             @Override
             public void onItemClick(View v, int pos) {
                 int teamIndex = pos+1;
-                Bitmap teamLogo = arrayList.get(pos).logo;
+                Bitmap teamLogo = ApplicationClass.StringToBitmap(arrayList.get(pos).logo);
                 String teamName = arrayList.get(pos).name;
                 PopupMakeMatchActivity popupMakeMatchActivityContext = (PopupMakeMatchActivity)PopupMakeMatchActivity.context;
                 if(isOurTeam){

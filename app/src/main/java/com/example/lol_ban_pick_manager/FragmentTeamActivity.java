@@ -112,8 +112,7 @@ public class FragmentTeamActivity extends Fragment {
             if(resultCode == -1){
                 boolean isChange = data.getExtras().getBoolean("isChange");
                 if(isChange){
-                    int teamIndex = data.getExtras().getInt("teamIndex");
-                    adapter.notifyItemChanged(teamIndex);
+                    adapter.notifyDataSetChanged();
                 }
             }
         }

@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import io.paperdb.Paper;
+
 public class FragmentMatchActivity extends Fragment {
     private RecyclerView recyclerView;
     private ImageView imageView_search;
@@ -37,9 +39,10 @@ public class FragmentMatchActivity extends Fragment {
             @Override
             public void onClick(View view) {
                 //todo
-                System.out.println(ApplicationClass.totalPlayerNum + " totalPlayer");
-                System.out.println(ApplicationClass.totalTeamNum + " totalTeam") ;
-                System.out.println(ApplicationClass.totalMatchNum + " totalMatch");
+                Paper.book().destroy();
+                Paper.book().write("totalPlayerNum", 0);
+                Paper.book().write("totalTeamNum", 0);
+                Paper.book().write("totalMatchNum", 0);
 
             }
         });

@@ -134,6 +134,12 @@ public class PopupMakePlayerActivity extends Activity {
                     ApplicationClass.showToast(getApplicationContext(), "이름을 2글자 이상 입력해주세요.");
                     return;
                 }
+                for(int i = 0; i < ApplicationClass.players.size(); i++){
+                    if(editText.getText().toString().equals(ApplicationClass.players.get(i).name)){
+                        ApplicationClass.showToast(getApplicationContext(), "중복된 이름입니다.");
+                        return;
+                    }
+                }
                 CustomDialog customDialog = new CustomDialog(PopupMakePlayerActivity.this);
                 customDialog.callFunction("이대로 진행하시겠습니까?");
                 customDialog.setOnOkClickListener(new CustomDialog.OnOkClickListener() {

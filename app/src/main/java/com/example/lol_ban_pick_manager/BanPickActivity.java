@@ -403,9 +403,9 @@ public class BanPickActivity extends AppCompatActivity {
                 int victoryType = data.getExtras().getInt("victoryType");
                 Bitmap image;
                 if(victoryType == 0){
-                    image = match.team0.logo;
+                    image = ApplicationClass.StringToBitmap(match.team0.logo);
                 }else if(victoryType == 1){
-                    image = match.team1.logo;
+                    image = ApplicationClass.StringToBitmap(match.team1.logo);
                 }else{
                     Drawable drawable = getResources().getDrawable(R.drawable.no);
                     image = ((BitmapDrawable)drawable).getBitmap();

@@ -111,7 +111,7 @@ public class TeamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 new_holder.textView_backgroud.setBackgroundResource(R.drawable.team_logo_backgroud);
                 new_holder.imageView_plus.setImageResource(R.drawable.nothing);
             }
-            new_holder.imageView_logo.setImageBitmap(mItems.get(position).logo);
+            new_holder.imageView_logo.setImageBitmap(ApplicationClass.StringToBitmap(mItems.get(position).logo));
             for(int i = 0; i < 5; i++){
                 String tear = mItems.get(position).players[i].tear;
                 new_holder.textView_player[i].setText(tear);

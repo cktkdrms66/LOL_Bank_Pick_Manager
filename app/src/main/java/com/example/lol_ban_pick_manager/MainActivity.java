@@ -43,18 +43,12 @@ public class MainActivity extends AppCompatActivity {
         if(isNeedToSetting){
             Champion.championSetting();
             Paper.init(this);
-            Paper.book().destroy();
+           // Paper.book().destroy();
             Team.Player.makePlus();
             Team.makePlus();
             Match.makePlus();
             Team.makeDefaultTeam();
             Team.Player.makeDefaultPlayer();
-//            ApplicationClass.players.add(Team.makePlayer("faker", "D3", "가렌", "리산드라", "코그모"));
-//            ApplicationClass.players.add(Team.makePlayer("차상근", "C", "베인", "아펠리오스", "자야", "케이틀린"));
-//            ApplicationClass.players.add(Team.makePlayer("qwerqwe", "G2","리신"));
-//            ApplicationClass.savePlayer(ApplicationClass.players.get(1));
-//            ApplicationClass.savePlayer(ApplicationClass.players.get(2));
-//            ApplicationClass.savePlayer(ApplicationClass.players.get(3));
 
             ApplicationClass.loadData();
             isNeedToSetting = false;

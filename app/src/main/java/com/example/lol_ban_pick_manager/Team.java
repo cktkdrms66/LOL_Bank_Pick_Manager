@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Team implements Serializable {
 
     String name;
-    Bitmap logo;
+    String logo;
     int type;
     int using = 0;
     ArrayList<Champion> most = new ArrayList<>();
@@ -60,12 +60,12 @@ public class Team implements Serializable {
     Team(int i){
         if(i == 0){
             name = " ";
-            logo = ((MainActivity)MainActivity.context).setBitmap(R.drawable.no);
+            logo = ApplicationClass.BitmapToString(((MainActivity)MainActivity.context).setBitmap(R.drawable.no));
             type = i;
         }
         else if(i == 1){
             name = "기본팀";
-            logo = ((MainActivity)MainActivity.context).setBitmap(R.drawable.no);
+            logo = ApplicationClass.BitmapToString(((MainActivity)MainActivity.context).setBitmap(R.drawable.no));
             type = i;
         }
         for(int j = 0; j < 5; j++){
@@ -75,7 +75,7 @@ public class Team implements Serializable {
     Team(String name, Bitmap logo, Player[] players, ArrayList<Champion> most){
         this.type = 2;
         this.name = name;
-        this.logo = logo;
+        this.logo = ApplicationClass.BitmapToString(logo);
         this.players = players;
         this.most = most;
     }

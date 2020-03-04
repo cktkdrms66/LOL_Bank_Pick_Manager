@@ -41,8 +41,8 @@ public class PopupSaveGameActivity extends Activity {
         match = ApplicationClass.matches.get(matchIndex);
         team0Name = intent.getExtras().getString("team0Name");
         team1Name = intent.getExtras().getString("team1Name");
-        team0Image = match.team0.logo;
-        team1Image = match.team1.logo;
+        team0Image = ApplicationClass.StringToBitmap(match.team0.logo);
+        team1Image = ApplicationClass.StringToBitmap(match.team1.logo);
 
         editText = findViewById(R.id.save_game_editText_input);
         textView_team_name = findViewById(R.id.save_game_team_name);
