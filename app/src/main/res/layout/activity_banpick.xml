@@ -904,19 +904,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/position_top" />
 
-        <EditText
-            android:id="@+id/banpick_editText_search"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="챔피언 이름"
-            android:textSize="10dp"
-            app:layout_constraintBottom_toBottomOf="@+id/banpick_imageView_top"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/banpick_imageView_top" />
-
         <ImageView
             android:id="@+id/banpick_imageView_jg"
             android:layout_width="25dp"
@@ -957,10 +944,10 @@
             android:id="@+id/banpick_imageView_searchicon"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_marginEnd="4dp"
-            app:layout_constraintBottom_toBottomOf="@+id/banpick_editText_search"
-            app:layout_constraintEnd_toStartOf="@+id/banpick_editText_search"
-            app:layout_constraintTop_toTopOf="@+id/banpick_editText_search"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/banpick_imageView_sup"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/banpick_imageView_sup"
             app:srcCompat="@drawable/searchicon" />
 
         <androidx.recyclerview.widget.RecyclerView

@@ -1,6 +1,5 @@
 package com.example.lol_ban_pick_manager;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,13 +11,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class FragmentPlayerActivity extends Fragment {
 
     RecyclerView recyclerView;
-    ImageView imageView_search;
+    ImageView imageView_setting;
     PlayerAdapter adapter;
 
     static int posIndex;
@@ -34,14 +32,16 @@ public class FragmentPlayerActivity extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_player,container,false);
 
-        imageView_search = view.findViewById(R.id.player_imageView_search);
+        imageView_setting = view.findViewById(R.id.player_imageView_setting);
         recyclerView = view.findViewById(R.id.player_recyclerView);
 
 
-        imageView_search.setOnClickListener(new View.OnClickListener() {
+        imageView_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //todo
+                for(int i = 0; i < ApplicationClass.players.size(); i++){
+                    System.out.println(ApplicationClass.players.get(i).name + " using " + ApplicationClass.players.get(i).using + ", type "+ApplicationClass.players.get(i).type );
+                }
             }
         });
 

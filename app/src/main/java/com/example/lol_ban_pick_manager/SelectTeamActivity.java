@@ -27,7 +27,7 @@ public class SelectTeamActivity extends Activity {
         setContentView(R.layout.fragment_team);
         
         textView = findViewById(R.id.team_textView_title);
-        imageView_search = findViewById(R.id.team_imageView_search);
+        imageView_search = findViewById(R.id.team_imageView_setting);
         recyclerView = findViewById(R.id.team_recyclerView);
 
 

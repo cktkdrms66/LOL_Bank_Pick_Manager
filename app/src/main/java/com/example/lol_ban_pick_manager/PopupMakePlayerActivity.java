@@ -71,7 +71,7 @@ public class PopupMakePlayerActivity extends Activity {
         champions.add(Champion.makePlus());
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        adapter = new ChampionAdapter(champions);
+        adapter = new ChampionAdapter(this, champions);
         recyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListener(new ChampionAdapter.OnItemClickListener() {
@@ -79,7 +79,8 @@ public class PopupMakePlayerActivity extends Activity {
             public void onItemClick(int pos, ImageView imageView) {
                 if(champions.get(pos).isChampion ==false){
                     Intent intent1 = new Intent(getApplicationContext(), SelectChampionActivity.class);
-                    intent1.putExtra("playerIndex", 1);
+                    intent1.putExtra("where", 0);
+                    intent1.putExtra("champions", champions);
                     startActivityForResult(intent1, 0);
                 } else{
                     if(adapter.getIsClicked(pos) == false){
@@ -165,10 +166,12 @@ public class PopupMakePlayerActivity extends Activity {
         if(requestCode == 0){
             if(resultCode == RESULT_OK){
                 int championIndex = data.getExtras().getInt("championIndex");
+                System.out.println("b");
                 if(championIndex == -1){
                     return;
                 }
                 champions.add(champions.size()-1, Champion.getChampion(championIndex));
+                System.out.println("c");
                 adapter.mIsClicked.add(false);
                 adapter.mIsPicked.add(false);
                 adapter.notifyItemInserted(champions.size()-2);

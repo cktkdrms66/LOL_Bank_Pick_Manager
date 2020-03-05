@@ -11,6 +11,8 @@ import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -33,6 +35,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class BanPickActivity extends AppCompatActivity {
 
@@ -53,12 +56,12 @@ public class BanPickActivity extends AppCompatActivity {
     TextView[] textView_team1_tears = new TextView[5];
     ImageView[][] imageView_team0_mosts = new ImageView[5][3];
     ImageView[][] imageView_team1_mosts = new ImageView[5][3];
-    EditText editText_search;
     ImageView[] imageView_position = new ImageView[5];
     ImageView imageView_menu;
     TextView textView_prev;
     TextView textView_next;
     Button button_pick;
+    ImageView imageView_search;
 
     
     static Context context;
@@ -70,7 +73,7 @@ public class BanPickActivity extends AppCompatActivity {
     boolean isFirst;
     boolean isPickChange;
     int swapIndex;
-
+    ChampionAdapter adapter;
      int[][] mostImage0;
      int[][] mostImage1;
     ArrayList<Match.GameElement> pickSerial;
@@ -137,6 +140,8 @@ public class BanPickActivity extends AppCompatActivity {
         }
         pickSerial = game.gameElements;
 
+
+        imageView_search = findViewById(R.id.banpick_imageView_searchicon);
 
         textView_team0_name = findViewById(R.id.banpick_textView_team0_name);
         textView_team1_name = findViewById(R.id.banpick_textView_team1_name);
@@ -251,7 +256,6 @@ public class BanPickActivity extends AppCompatActivity {
         imageView_position[3] = findViewById(R.id.banpick_imageView_bot);
         imageView_position[4] = findViewById(R.id.banpick_imageView_sup);
 
-        editText_search = findViewById(R.id.banpick_editText_search);
         imageView_menu = findViewById(R.id.banpick_imageView_menu);
         textView_prev = findViewById(R.id.banpick_textView_left);
         textView_next = findViewById(R.id.banpick_textView_right);
@@ -284,7 +288,9 @@ public class BanPickActivity extends AppCompatActivity {
         //중단 챔피언 리사이클러뷰
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 4));
-        final ChampionAdapter adapter = new ChampionAdapter(ApplicationClass.champions);
+        final ArrayList<Champion> champions = new ArrayList<>();
+        champions.addAll(ApplicationClass.champions);
+        adapter = new ChampionAdapter(this, champions);
         recyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListener(new ChampionAdapter.OnItemClickListener() {
@@ -293,14 +299,16 @@ public class BanPickActivity extends AppCompatActivity {
                 if(isLast){
                     return;
                 }
-                if(adapter.getIsClicked(pos) == false){
+                System.out.println("champios max " + champions.size());
+                int index = adapter.filteredList.get(pos).id;
+                if(adapter.getIsClicked(index) == false){
                     int image = Champion.getChampionImage(adapter.getmOnlyItemPosition());
                     setMostColor(false, image);
 
-                    adapter.setIsClicked(pos, true);
-                    adapter.setOnlyClick(pos, true);
+                    adapter.setIsClicked(index, true);
+                    adapter.setOnlyClick(index, true);
 
-                    image = Champion.getChampionImage(pos);
+                    image = Champion.getChampionImage(index);
                     setMostColor(true, image);
 
                     setButton_pick(true);
@@ -308,21 +316,39 @@ public class BanPickActivity extends AppCompatActivity {
                     if(nowPick.type == 0){
                         if(nowPick.isOurTeam){
                             imageView_team0_bans[nowPick.index]
-                                    .setImageResource(ApplicationClass.champions.get(pos).image);
+                                    .setImageResource(ApplicationClass.champions.get(index).image);
                         }else{
                             imageView_team1_bans[nowPick.index]
-                                    .setImageResource(ApplicationClass.champions.get(pos).image);
+                                    .setImageResource(ApplicationClass.champions.get(index).image);
                         }
                     }else if(nowPick.type == 1){
                         if(nowPick.isOurTeam){
                             imageView_team0_picks[nowPick.index]
-                                    .setImageResource(ApplicationClass.champions.get(pos).image);
+                                    .setImageResource(ApplicationClass.champions.get(index).image);
                         }else{
                             imageView_team1_picks[nowPick.index]
-                                    .setImageResource(ApplicationClass.champions.get(pos).image);
+                                    .setImageResource(ApplicationClass.champions.get(index).image);
                         }
                     }
                 }
+            }
+        });
+
+        imageView_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isLast == true){
+                    return;
+                }
+                Intent intent1 = new Intent(getApplicationContext(), SelectChampionActivity.class);
+                intent1.putExtra("where", 2);
+                intent1.putExtra("matchIndex", matchIndex);
+                int[] championIndexes = new int[game.gameElements.size()-1];
+                for(int i = 0; i < championIndexes.length; i++){
+                    championIndexes[i] = ((Match.PickClass)game.gameElements.get(i)).championIndex;
+                }
+                intent1.putExtra("championIndexes", championIndexes);
+                startActivityForResult(intent1, 1);
             }
         });
 
@@ -412,9 +438,51 @@ public class BanPickActivity extends AppCompatActivity {
                 }
                 Match.Game newGame = new Match.Game();
                 newGame.setGame(gameName, image, star, game.gameElements);
-                ApplicationClass.addGame(match, newGame);
-                System.out.println(lastPickIndex + " lastPickIndex");
+                ApplicationClass.addGame(matchIndex, newGame);
                 ApplicationClass.showToast(context, "저장이 완료되었습니다.");
+            }
+        }else if(requestCode == 1){
+            if(resultCode == RESULT_OK){
+                int pos = data.getExtras().getInt("championIndex");
+                System.out.println(pos);
+                if(pos != -1){
+                    if(isLast){
+                        return;
+                    }
+                    int index = adapter.filteredList.get(pos).id;
+                    if(adapter.getIsClicked(index) == false){
+                        int image = Champion.getChampionImage(adapter.getmOnlyItemPosition());
+                        setMostColor(false, image);
+
+                        adapter.setIsClicked(index, true);
+                        adapter.setOnlyClick(index, true);
+
+                        image = Champion.getChampionImage(index);
+                        setMostColor(true, image);
+
+                        setButton_pick(true);
+                        Match.PickClass nowPick = (Match.PickClass) pickSerial.get(pickIndex);
+                        if(nowPick.type == 0){
+                            if(nowPick.isOurTeam){
+                                imageView_team0_bans[nowPick.index]
+                                        .setImageResource(ApplicationClass.champions.get(index).image);
+                            }else{
+                                imageView_team1_bans[nowPick.index]
+                                        .setImageResource(ApplicationClass.champions.get(index).image);
+                            }
+                        }else if(nowPick.type == 1){
+                            if(nowPick.isOurTeam){
+                                imageView_team0_picks[nowPick.index]
+                                        .setImageResource(ApplicationClass.champions.get(index).image);
+                            }else{
+                                imageView_team1_picks[nowPick.index]
+                                        .setImageResource(ApplicationClass.champions.get(index).image);
+                            }
+                        }
+                    }
+
+                }
+
             }
         }
 
@@ -427,9 +495,11 @@ public class BanPickActivity extends AppCompatActivity {
         customDialog.setOnOkClickListener(new CustomDialog.OnOkClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                finish();
             }
         });
     }

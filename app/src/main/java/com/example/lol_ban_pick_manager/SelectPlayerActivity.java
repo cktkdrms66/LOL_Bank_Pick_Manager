@@ -2,7 +2,6 @@ package com.example.lol_ban_pick_manager;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -10,7 +9,6 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -30,7 +28,7 @@ public class SelectPlayerActivity extends Activity {
         setContentView(R.layout.fragment_player);
 
         textView = findViewById(R.id.player_textView_title);
-        imageView_search = findViewById(R.id.player_imageView_search);
+        imageView_search = findViewById(R.id.player_imageView_setting);
         recyclerView = findViewById(R.id.player_recyclerView);
 
         imageView_search.setOnClickListener(new View.OnClickListener() {

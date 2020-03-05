@@ -22,11 +22,21 @@
         android:id="@+id/champion_imageView_search2"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_marginEnd="16dp"
+        android:src="@drawable/searchicon"
         app:layout_constraintBottom_toBottomOf="@+id/champion_textView_title2"
+        app:layout_constraintEnd_toStartOf="@+id/champion_editText"
+        app:layout_constraintTop_toTopOf="@+id/champion_textView_title2" />
+
+    <EditText
+        android:id="@+id/champion_editText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="@+id/champion_imageView_search2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/champion_textView_title2"
-        android:src="@drawable/searchicon" />
+        app:layout_constraintTop_toTopOf="@+id/champion_imageView_search2" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/champion_guideline2"
@@ -41,5 +51,8 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="@+id/champion_guideline2"
-        tools:layout_editor_absoluteX="0dp" />
+        tools:layout_editor_absoluteX="0dp">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

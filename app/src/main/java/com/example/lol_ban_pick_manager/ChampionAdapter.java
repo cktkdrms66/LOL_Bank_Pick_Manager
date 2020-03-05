@@ -7,6 +7,8 @@ import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,10 +17,14 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
-public class ChampionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ChampionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
 
-    ArrayList<Champion> mItems;
+    Context context;
+    ArrayList<Champion> unFilteredList;
+    ArrayList<Champion> filteredList;
     ArrayList<Boolean> mIsClicked = new ArrayList<>();
     ArrayList<Boolean> mIsPicked = new ArrayList<>();
     int mOnlyItemPosition = -1;
@@ -29,7 +35,7 @@ public class ChampionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public Champion getChampion(int pos){
-        return mItems.get(pos);
+        return filteredList.get(pos);
     }
     public boolean getIsClicked(int pos){
         return mIsClicked.get(pos);
@@ -139,9 +145,11 @@ public class ChampionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    public ChampionAdapter(ArrayList<Champion> champions){
-        mItems = champions;
-        for(int i = 0; i < mItems.size(); i++){
+    public ChampionAdapter(Context context, ArrayList<Champion> champions){
+        filteredList = champions;
+        unFilteredList = champions;
+        this.context = context;
+        for(int i = 0; i < filteredList.size(); i++){
             mIsClicked.add(false);
             mIsPicked.add(false);
         }
@@ -150,15 +158,15 @@ public class ChampionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_champion, parent, false);
+        View v = LayoutInflater.from(context).inflate(R.layout.cardview_champion, parent, false);
         return new ChampionViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ChampionViewHolder new_holder = (ChampionViewHolder) holder;
-        new_holder.textView.setText(mItems.get(position).name);
-        new_holder.imageView.setImageResource(mItems.get(position).image);
+        new_holder.textView.setText(filteredList.get(position).name);
+        new_holder.imageView.setImageResource(filteredList.get(position).image);
         if(position < mIsClicked.size()){
             if(mIsPicked.get(position)){
                 new_holder.imageView.setColorFilter(Color.parseColor("#D81B60"), PorterDuff.Mode.DST);
@@ -177,8 +185,39 @@ public class ChampionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemCount() {
-        return mItems.size();
+        return filteredList.size();
     }
 
 
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if(charString.isEmpty()) {
+                    filteredList = unFilteredList;
+                } else {
+                    ArrayList<Champion> filteringList = new ArrayList<>();
+                    for(Champion champion : unFilteredList) {
+                        String name = champion.name;
+                        if(name.toLowerCase().contains(charString.toLowerCase())) {
+                            filteringList.add(champion);
+                        }
+                    }
+                    filteredList = filteringList;
+                }
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = filteredList;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults results) {
+                filteredList = (ArrayList<Champion>)results.values;
+                notifyDataSetChanged();
+            }
+        };
+
+    }
 }

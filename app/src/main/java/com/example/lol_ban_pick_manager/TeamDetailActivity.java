@@ -77,7 +77,7 @@ public class TeamDetailActivity extends Activity {
         }
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        ChampionAdapter adapter = new ChampionAdapter(team.most);
+        ChampionAdapter adapter = new ChampionAdapter(this, team.most);
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(new ChampionAdapter.OnItemClickListener() {
             @Override
@@ -144,32 +144,36 @@ public class TeamDetailActivity extends Activity {
             if(resultCode == RESULT_OK){
                 Boolean isChange = data.getExtras().getBoolean("isChange");
                 if(isChange){
-                    for(int i = 0; i < 5; i++){
-                        if(team.players[i].type ==1 ){
+                    for(int i = 0; i < 5; i++) {
+                        if (team.players[i].type == 1) {
                             continue;
                         }
-                        if(team.players[i].most.size() == 0){
+                        if (team.players[i].most.size() == 0) {
                             imageViews[i].setImageResource(R.drawable.randomchampion);
-                        }else{
+                        } else {
                             imageViews[i].setImageResource(team.players[i].most.get(0).image);
                         }
                         imageViews_tear[i].setColorFilter(Team.tear_color(team.players[i].tear), PorterDuff.Mode.SRC_IN);
                         textViews_tear[i].setText(team.players[i].tear);
                     }
-                change = true;
+                    ApplicationClass.saveReTeam(team);
+                    change = true;
                 }
             }
         }else if(requestCode == 1){
             if(resultCode == RESULT_OK){
                 int playerIndex = data.getExtras().getInt("playerIndex");
-                if(playerIndex == -1){
+                if(playerIndex == -1 || playerIndex == 1){
                     return;
                 }
                 if(team.players[selectIndex] == ApplicationClass.players.get(playerIndex)){
                     return;
                 }
-                team.players[selectIndex].using--;
-                ApplicationClass.saveRePlayer(team.players[selectIndex]);
+                if(team.players[selectIndex].type != 1){
+                    team.players[selectIndex].using--;
+                    ApplicationClass.saveRePlayer(team.players[selectIndex]);
+
+                }
 
                 imageViews_tear[selectIndex].setColorFilter(Team.tear_color(ApplicationClass.players.get(playerIndex).tear),
                         PorterDuff.Mode.SRC_IN);
@@ -183,6 +187,7 @@ public class TeamDetailActivity extends Activity {
                 team.players[selectIndex] = ApplicationClass.players.get(playerIndex);
                 team.players[selectIndex].using++;
                 ApplicationClass.saveRePlayer(team.players[selectIndex]);
+                ApplicationClass.saveReTeam(team);
                 change = true;
 
             }

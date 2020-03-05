@@ -1,9 +1,7 @@
 package com.example.lol_ban_pick_manager;
 
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class FragmentTeamActivity extends Fragment {
 
     RecyclerView recyclerView;
-    ImageView imageView_search;
+    ImageView imageView_setting;
     TeamAdapter adapter;
 
     static int posIndex;
@@ -27,26 +25,46 @@ public class FragmentTeamActivity extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+    public class WrapContentLinearLayoutManager extends LinearLayoutManager {
+        public WrapContentLinearLayoutManager(Context context) {
+            super(context);
+        }
 
+        //... constructor
+        @Override
+        public void onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state) {
+            try {
+                super.onLayoutChildren(recycler, state);
+            } catch (IndexOutOfBoundsException e) {
+
+            }
+        }
+    }
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_team,container,false);
 
-        imageView_search = view.findViewById(R.id.team_imageView_search);
+        imageView_setting = view.findViewById(R.id.team_imageView_setting);
         recyclerView = view.findViewById(R.id.team_recyclerView);
 
 
-        imageView_search.setOnClickListener(new View.OnClickListener() {
+        imageView_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //todo
+                for(int i = 0; i < ApplicationClass.teams.size(); i++){
+                    System.out.println("team "+ i );
+                    for(int j = 0; j < 5; j++){
+                        System.out.println(ApplicationClass.teams.get(i).players[j].name + "  " +ApplicationClass.teams.get(i).players[j].using);
+                    }
+                }
+
             }
         });
 
 
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setLayoutManager(new WrapContentLinearLayoutManager(getActivity()));
         adapter = new TeamAdapter(ApplicationClass.teams);
         recyclerView.setAdapter(adapter);
 
@@ -87,7 +105,7 @@ public class FragmentTeamActivity extends Fragment {
 
                             }
                             ApplicationClass.removeTeam(posIndex);
-                            adapter.notifyItemRemoved(posIndex);
+                            adapter.notifyDataSetChanged();
                         }
                     });
                 }

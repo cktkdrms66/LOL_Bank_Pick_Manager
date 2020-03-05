@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 public class Team implements Serializable {
 
+    int id;
     String name;
     String logo;
     int type;
@@ -17,6 +18,8 @@ public class Team implements Serializable {
 
 
     public static class Player implements Serializable{
+
+        int id;
         int type;
         String name;
         String tear;
@@ -31,6 +34,7 @@ public class Team implements Serializable {
                 tear = " ";
             }
             else if(i == 1){
+                id = 1;
                 type = 1;
                 name = "이름없음";
                 tear = "UN";
@@ -64,6 +68,7 @@ public class Team implements Serializable {
             type = i;
         }
         else if(i == 1){
+            id = 1;
             name = "기본팀";
             logo = ApplicationClass.BitmapToString(((MainActivity)MainActivity.context).setBitmap(R.drawable.no));
             type = i;
@@ -90,7 +95,7 @@ public class Team implements Serializable {
     public static Player makePlayer(String name, String tear, ArrayList<Champion> champions){
         Player player = new Player(name, tear, champions);
         ApplicationClass.players.add(player);
-        ApplicationClass.savePlayer(player);
+        ApplicationClass.savePlayer(ApplicationClass.players.size()-1);
         return player;
     }
     public static Player makePlayer(String name, String tear, String... champions){
@@ -122,12 +127,12 @@ public class Team implements Serializable {
     public static Team makeTeam(String name, Bitmap logo, Player[] players, ArrayList<Champion> most){
         Team team = new Team(name, logo, players, most);
         ApplicationClass.teams.add(team);
-        ApplicationClass.saveTeam(team);
+        ApplicationClass.saveTeam(ApplicationClass.teams.size() -1);
         for(int i = 0; i < 5; i++){
             if(players[i].type == 1){
                 continue;
             }
-            players[i].using++;
+            team.players[i].using++;
             ApplicationClass.saveRePlayer(players[i]);
         }
         return team;

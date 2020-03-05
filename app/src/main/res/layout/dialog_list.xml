@@ -10,37 +10,28 @@
     <TextView
         android:id="@+id/dialog_list_textView0"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
-        android:text="TextView"
-        android:textColor="#81000000"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="SKT"
+        android:textColor="#81020202"
         android:textSize="20dp" />
 
     <TextView
         android:id="@+id/dialog_list_textView1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
-        android:text="TextView"
-        android:textColor="#81000000"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="젠지"
+        android:textColor="#81020202"
         android:textSize="20dp" />
 
     <TextView
         android:id="@+id/dialog_list_textView2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="30dp"
-        android:text="TextView"
-        android:textColor="#81000000"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="설정 안함"
+        android:textColor="#81020202"
         android:textSize="20dp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout

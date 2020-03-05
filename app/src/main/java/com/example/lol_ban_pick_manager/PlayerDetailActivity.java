@@ -92,7 +92,7 @@ public class PlayerDetailActivity extends Activity {
         }
         arrayList.add(Champion.makePlus());
 
-        adapter = new ChampionAdapter(arrayList);
+        adapter = new ChampionAdapter(this, arrayList);
         recyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListener(new ChampionAdapter.OnItemClickListener() {
@@ -100,7 +100,12 @@ public class PlayerDetailActivity extends Activity {
             public void onItemClick(int pos, ImageView imageView) {
                 if(arrayList.get(pos).isChampion ==false){
                     Intent intent1 = new Intent(getApplicationContext(), SelectChampionActivity.class);
-                    intent1.putExtra("playerIndex",intent.getExtras().getInt("playerIndex"));
+                    intent1.putExtra("where", 1);
+                    int[] championIndexes = new int[arrayList.size()-1];
+                    for(int i = 0; i < championIndexes.length; i++){
+                        championIndexes[i] = arrayList.get(i).id;
+                    }
+                    intent1.putExtra("championIndexes", championIndexes);
                     startActivityForResult(intent1, 0);
                 } else{
                     if(adapter.getIsClicked(pos) == false){

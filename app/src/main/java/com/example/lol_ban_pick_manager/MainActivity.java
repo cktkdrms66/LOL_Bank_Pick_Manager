@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         if(isNeedToSetting){
             Champion.championSetting();
             Paper.init(this);
-           // Paper.book().destroy();
+      //      Paper.book().destroy();
             Team.Player.makePlus();
             Team.makePlus();
             Match.makePlus();

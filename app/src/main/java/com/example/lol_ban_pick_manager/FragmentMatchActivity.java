@@ -1,5 +1,6 @@
 package com.example.lol_ban_pick_manager;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,10 +18,25 @@ import io.paperdb.Paper;
 
 public class FragmentMatchActivity extends Fragment {
     private RecyclerView recyclerView;
-    private ImageView imageView_search;
+    private ImageView imageView_setting;
 
     static int posIndex;
     MatchAdapter adapter;
+    public class WrapContentLinearLayoutManager extends LinearLayoutManager {
+        public WrapContentLinearLayoutManager(Context context) {
+            super(context);
+        }
+
+        //... constructor
+        @Override
+        public void onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state) {
+            try {
+                super.onLayoutChildren(recycler, state);
+            } catch (IndexOutOfBoundsException e) {
+
+            }
+        }
+    }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,11 +47,11 @@ public class FragmentMatchActivity extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_match,container,false);
 
-        imageView_search = view.findViewById(R.id.match_imageView_search);
+        imageView_setting = view.findViewById(R.id.match_imageView_setting);
         recyclerView = view.findViewById(R.id.team_recyclerView);
 
 
-        imageView_search.setOnClickListener(new View.OnClickListener() {
+        imageView_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //todo
@@ -49,7 +65,7 @@ public class FragmentMatchActivity extends Fragment {
 
 
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setLayoutManager(new WrapContentLinearLayoutManager(getActivity()));
         adapter = new MatchAdapter(ApplicationClass.matches);
         recyclerView.setAdapter(adapter);
 

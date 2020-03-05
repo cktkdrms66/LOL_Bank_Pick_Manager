@@ -45,6 +45,8 @@ public class ApplicationClass extends Application {
 
     static boolean isNeedToSetting = true;
 
+    static DataReadWrite task;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -68,168 +70,81 @@ public class ApplicationClass extends Application {
         return temp;
     }
 
-    
-    public static void saveMatch(Match match){
-        int index = ApplicationClass.totalMatchNum++;
-        String string = "Match" + index;
-        System.out.println("save " + string);
-        Paper.book().write(string, match);
-        Paper.book().write("totalMatchNum", totalMatchNum);
+
+    public static void saveMatch(int matchIndex){
+        task = new DataReadWrite();
+        task.execute(matchIndex, 0);
     }
-    public static void saveReMatch(Match match){
-        for(int i = 1; i < matches.size(); i++){
-            if(matches.get(i) == match){
-                String string = "Match" + (i-1);
-                System.out.println("resave " + string);
-                Paper.book().write(string, match);
-                break;
-            }
-        }
+    public static void saveReMatch(int matchIndex){
+        task = new DataReadWrite();
+        task.execute(matchIndex, 1);
     }
     public static void removeMatch(int matchIndex){
-        matches.get(matchIndex).team0.using--;
-        saveReTeam(matches.get(matchIndex).team0);
-        matches.get(matchIndex).team1.using--;
-        saveReTeam(matches.get(matchIndex).team1);
-        matches.remove(matchIndex);
-        System.out.println("remove Match" + (matchIndex-1));
-        Paper.book().delete("Match" + (matchIndex-1));
-        for(int i = 1; i < matches.size(); i++){
-            String string = "Match" + (i-1);
-            System.out.println("save " + string);
-            Paper.book().write(string, matches.get(i));
-        }
-        totalMatchNum--;
-        Paper.book().write("totalMatchNum", totalMatchNum);
-
+        task = new DataReadWrite();
+        task.execute(matchIndex, 2);
     }
-    public static void saveTeam(Team team){
-        int index = ApplicationClass.totalTeamNum++;
-        System.out.println("save Team" + index);
-        Paper.book().write("Team" + index, team);
-        Paper.book().write("totalTeamNum", totalTeamNum);
+
+
+
+
+    public static void saveTeam(int teamIndex){
+        task = new DataReadWrite();
+        task.execute(teamIndex, 3);
     }
     public static void saveReTeam(Team team){
-        for(int i = 2; i < teams.size(); i++){
-            if(teams.get(i) == team){
-                String string = "Team" + (i-2);
-                System.out.println("resave " + string);
-                Paper.book().write(string, team);
-                break;
+        for(int i = 0; i < ApplicationClass.teams.size(); i++){
+            if(team == ApplicationClass.teams.get(i)){
+                saveReTeam(i);
+                return;
             }
         }
+    }
+    public static void saveReTeam(int teamIndex){
+        task = new DataReadWrite();
+        task.execute(teamIndex, 4);
     }
     public static void removeTeam(int teamIndex){
-        System.out.println("removeTeam");
-        for(int i = 0; i < 5; i++){
-            if(teams.get(teamIndex).players[i].type == 1){
-                continue;
-            }
-            teams.get(teamIndex).players[i].using--;
-            System.out.println("resave Player " + teams.get(teamIndex).players[i].name);
-            saveRePlayer(teams.get(teamIndex).players[i]);
-        }
-        teams.remove(teamIndex);
-        Paper.book().delete("Team" + (teamIndex-2));
-        System.out.println("remove Team" + (teamIndex-2));
-        for(int i = 2; i < teams.size(); i++){
-            String string = "Team" + (i-2);
-            System.out.println("resave " + string);
-            Paper.book().write(string, teams.get(i));
-        }
-        totalTeamNum--;
-        Paper.book().write("totalTeamNum", totalTeamNum);
+        task = new DataReadWrite();
+        task.execute(teamIndex, 5);
     }
-    
-    public static void savePlayer(Team.Player player){
-        int index = totalPlayerNum++;
-        System.out.println("save Player" + index);
-        Paper.book().write("Player" + index, player);
-        Paper.book().write("totalPlayerNum", totalPlayerNum);
+
+
+
+
+    public static void savePlayer(int playerIndex){
+        task = new DataReadWrite();
+        task.execute(playerIndex, 6);
     }
     public static void saveRePlayer(Team.Player player){
-        for(int i = 2; i < players.size(); i++){
-            if(players.get(i) == player){
-                String string = "Player" + (i-2);
-                System.out.println("write " + string);
-                Paper.book().write(string, player);
-                break;
+        for(int i =0 ; i < players.size(); i++){
+            if(player == players.get(i)){
+                saveRePlayer(i);
+                return;
             }
         }
     }
-    public static void removePlayer(int PlayerIndex){
-        System.out.println("removePlayer");
-        players.remove(PlayerIndex);//0 1 2
-        Paper.book().delete("Player" + (PlayerIndex-2));
-        System.out.println("remove Player"+(PlayerIndex-2));
-        for(int i = 2; i < players.size(); i++){
-            String string = "Player" + (i-2);
-            System.out.println("write " + string);
-            Paper.book().write(string, players.get(i));
-        }
-        totalPlayerNum--;
-        Paper.book().write("totalPlayerNum", totalPlayerNum);
+    public static void saveRePlayer(int playerIndex){
+        task = new DataReadWrite();
+        task.execute(playerIndex, 7);
+    }
+    public static void removePlayer(int playerIndex){
+        task = new DataReadWrite();
+        task.execute(playerIndex, 8);
     }
 
     public static void loadData(){
-
-        String first = Paper.book().read("first");
-        if(first == null){
-            System.out.println("first");
-            totalMatchNum = 0;
-            totalPlayerNum = 0;
-            totalTeamNum = 0;
-            Paper.book().write("totalPlayerNum", totalPlayerNum);
-            Paper.book().write("totalMatchNum", totalMatchNum);
-            Paper.book().write("totalTeamNum", totalTeamNum);
-            Paper.book().write("first", "not first");
-        }else{
-            System.out.println(first);
-            totalPlayerNum = Paper.book().read("totalPlayerNum");
-            totalTeamNum = Paper.book().read("totalTeamNum");
-            totalMatchNum = Paper.book().read("totalMatchNum");
-
-            System.out.println(totalMatchNum);
-            System.out.println(totalTeamNum);
-            System.out.println(totalPlayerNum);
-
-            loadPlayer();
-            loadTeam();
-            loadMatch();
-        }
-    }
-    public static void loadMatch(){
-        for(int i = 0; i < totalMatchNum; i++){
-            Match match = Paper.book().read("Match" + i);
-            matches.add(match);
-        }
-    }
-    public static void loadTeam(){
-        for(int i = 0; i < totalTeamNum; i++){
-            Team team = Paper.book().read("Team" + i);
-            teams.add(team);
-        }
-    }
-    public static void loadPlayer(){
-        for(int i = 0; i < totalPlayerNum; i++){
-            Team.Player player = Paper.book().read("Player" + i);
-            players.add(player);
-        }
+        task = new DataReadWrite();
+        task.execute(0, 9);
     }
 
-
-
-
-
+    public static void addGame(int matchIndex, Match.Game game){
+        ApplicationClass.matches.get(matchIndex).games.add(game);
+        ApplicationClass.matches.get(matchIndex).gameNum++;
+        saveReMatch(matchIndex);
+    }
 
     static void showToast(Context context, String text){
         Toast.makeText(context, text, Toast.LENGTH_LONG).show();
-    }
-
-    static void addGame(Match match, Match.Game game){
-        match.games.add(game);
-        match.gameNum++;
-        saveReMatch(match);
     }
 
     static void settingFirst(){

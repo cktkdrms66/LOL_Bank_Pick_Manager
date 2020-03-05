@@ -41,7 +41,7 @@ public class Match  {
     public static Match makeMatch(String name, Team team0, Team team1, boolean isTeam0Blue, int gameNum, ArrayList<Game> games){
         Match match = new Match(name, team0, team1, isTeam0Blue, gameNum, games);
         ApplicationClass.matches.add(match);
-        ApplicationClass.saveMatch(match);
+        ApplicationClass.saveMatch(ApplicationClass.matches.size()-1);
         team0.using++;
         team1.using++;
         if(team0.type !=1){
